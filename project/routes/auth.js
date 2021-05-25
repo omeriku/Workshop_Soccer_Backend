@@ -9,7 +9,7 @@ router.post("/Register", async (req, res, next) => {
     // valid parameters
     // username exists
     const users = await DButils.execQuery(
-      "SELECT username FROM dbo.users_tirgul"
+      "SELECT username FROM dbo.users"
     );
 
     if (users.find((x) => x.username === req.body.username))
