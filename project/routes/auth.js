@@ -3,7 +3,7 @@ var router = express.Router();
 const DButils = require("../routes/utils/DButils");
 const bcrypt = require("bcryptjs");
 
-router.post("/Register", async (req, res, next) => {
+router.post("/register", async (req, res, next) => {
   try {
     // parameters exists
     // valid parameters
@@ -14,6 +14,8 @@ router.post("/Register", async (req, res, next) => {
 
     if (users.find((x) => x.username === req.body.username))
       throw { status: 409, message: "Username taken" };
+    if (users.find((x) => x.email === req.body.email))
+      throw { status: 409, message: "email taken" };
 
     //hash the password
     let hash_password = bcrypt.hashSync(
@@ -24,7 +26,7 @@ router.post("/Register", async (req, res, next) => {
 
     // add the new username
     await DButils.execQuery(
-      `INSERT INTO dbo.users (username, password) VALUES ('${req.body.username}', '${hash_password}')`
+      `INSERT INTO dbo.users (username, password, firstname, lastname, email, country, imageUrl) VALUES ('${req.body.username}', '${hash_password}', '${req.body.firstname}', '${req.body.lastname}', '${req.body.email}', '${req.body.country}', '${req.body.imageUrl}')`
     );
     res.status(201).send("user created");
   } catch (error) {
@@ -32,7 +34,7 @@ router.post("/Register", async (req, res, next) => {
   }
 });
 
-router.post("/Login", async (req, res, next) => {
+router.post("/login", async (req, res, next) => {
   try {
     const user = (
       await DButils.execQuery(
@@ -57,7 +59,7 @@ router.post("/Login", async (req, res, next) => {
   }
 });
 
-router.post("/Logout", function (req, res) {
+router.post("/logout", function (req, res) {
   req.session.reset(); // reset the session info --> send cookie when  req.session == undefined!!
   res.send({ success: true, message: "logout succeeded" });
 });

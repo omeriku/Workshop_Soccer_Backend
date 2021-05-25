@@ -21,7 +21,7 @@ paths:
   /register:
     post:
       tags:
-      - Reg
+      - User
       summary: A new user adds to the system
       description: YAML object conntains all the details
       requestBody:
@@ -38,7 +38,7 @@ paths:
   /login:
     post:
       tags:
-      - Log
+      - User
       summary: logs in to the system
       requestBody:
         content:
@@ -51,6 +51,22 @@ paths:
           description: the user got in to the system
         "400":
           description: Wrong parameters
+  /logout:
+    post:
+      tags:
+      - User
+      summary: logs out of the system
+      # requestBody:
+      #   content:
+      #     application/json:
+      #       schema:
+      #         $ref: '#/components/schemas/UserLogin'
+        # required: true
+      responses:
+        "200":
+          description: the user got out of the system Sucs
+        "400":
+          description: Something went Wrong 
   /team/{teamId}:
     get:
       tags:
