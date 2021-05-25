@@ -8,10 +8,8 @@ tags:
   - User
   - Team
   - Player
-  - Coach
   - League
-  - Add Favorites
-  - Get Favorites
+  - Favorites
 paths:
   /register:
     post:
@@ -131,29 +129,29 @@ paths:
                 $ref: '#/components/schemas/Player'
         "400":
           description: Wrong parameters
-  /coach/{coachId}:
-    get:
-      tags:
-      - Coach
-      parameters:
-      - name: coachId
-        in: path
-        description: id of Coach to return
-        required: true
-        style: simple
-        explode: false
-        schema:
-          type: integer
-          example: 123
-      responses:
-        "200":
-          description: successful search
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Coach'
-        "400":
-          description: Wrong parameters
+  # /coach/{coachId}:
+  #   get:
+  #     tags:
+  #     - Coach
+  #     parameters:
+  #     - name: coachId
+  #       in: path
+  #       description: id of Coach to return
+  #       required: true
+  #       style: simple
+  #       explode: false
+  #       schema:
+  #         type: integer
+  #         example: 123
+  #     responses:
+  #       "200":
+  #         description: successful search
+  #         content:
+  #           application/json:
+  #             schema:
+  #               $ref: '#/components/schemas/Coach'
+  #       "400":
+  #         description: Wrong parameters
   /league/getDetails:
     get:
       tags:
@@ -180,7 +178,7 @@ paths:
   /favorites/game:
     post:
       tags:
-      - Add Favorites
+      - Favorites
       summary: adds fav game
       requestBody:
         content:
@@ -193,42 +191,42 @@ paths:
           description: game was added to favs
         "400":
           description: Wrong parameters
-  /favorites/player:
-    post:
-      tags:
-      - Add Favorites
-      summary: adds fav player
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Player'
-        required: true
-      responses:
-        "201":
-          description: player was added to favs
-        "400":
-          description: Wrong parameters
-  /favorites/team:
-    post:
-      tags:
-      - Add Favorites
-      summary: adds fav team
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Team'
-        required: true
-      responses:
-        "201":
-          description: team was added to favs
-        "400":
-          description: Wrong parameters
+  # /favorites/player:
+  #   post:
+  #     tags:
+  #     - Add Favorites
+  #     summary: adds fav player
+  #     requestBody:
+  #       content:
+  #         application/json:
+  #           schema:
+  #             $ref: '#/components/schemas/Player'
+  #       required: true
+  #     responses:
+  #       "201":
+  #         description: player was added to favs
+  #       "400":
+  #         description: Wrong parameters
+  # /favorites/team:
+  #   post:
+  #     tags:
+  #     - Add Favorites
+  #     summary: adds fav team
+  #     requestBody:
+  #       content:
+  #         application/json:
+  #           schema:
+  #             $ref: '#/components/schemas/Team'
+  #       required: true
+  #     responses:
+  #       "201":
+  #         description: team was added to favs
+  #       "400":
+  #         description: Wrong parameters
   /favorites/game/{userId}:
     get:
       tags:
-      - Get Favorites
+      - Favorites
       summary: search fav games of user
       parameters:
       - name: userId
@@ -251,58 +249,58 @@ paths:
                   $ref: '#/components/schemas/Game'
         "400":
           description: Wrong parameters
-  /favorites/player/{userId}:
-    get:
-      tags:
-      - Get Favorites
-      summary: search fav players of user
-      parameters:
-      - name: userId
-        in: path
-        description: return fav players of user
-        required: true
-        style: simple
-        explode: false
-        schema:
-          type: integer
-          example: 123
-      responses:
-        "200":
-          description: successful search
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Player'
-        "400":
-          description: Wrong parameters
-  /favorites/team/{userId}:
-    get:
-      tags:
-      - Get Favorites
-      summary: search fav teams of user
-      parameters:
-      - name: userId
-        in: path
-        description: return fav teams of user
-        required: true
-        style: simple
-        explode: false
-        schema:
-          type: integer
-          example: 123
-      responses:
-        "200":
-          description: successful search
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Team'
-        "400":
-          description: Wrong parameters
+  # /favorites/player/{userId}:
+  #   get:
+  #     tags:
+  #     - Get Favorites
+  #     summary: search fav players of user
+  #     parameters:
+  #     - name: userId
+  #       in: path
+  #       description: return fav players of user
+  #       required: true
+  #       style: simple
+  #       explode: false
+  #       schema:
+  #         type: integer
+  #         example: 123
+  #     responses:
+  #       "200":
+  #         description: successful search
+  #         content:
+  #           application/json:
+  #             schema:
+  #               type: array
+  #               items:
+  #                 $ref: '#/components/schemas/Player'
+  #       "400":
+  #         description: Wrong parameters
+  # /favorites/team/{userId}:
+  #   get:
+  #     tags:
+  #     - Get Favorites
+  #     summary: search fav teams of user
+  #     parameters:
+  #     - name: userId
+  #       in: path
+  #       description: return fav teams of user
+  #       required: true
+  #       style: simple
+  #       explode: false
+  #       schema:
+  #         type: integer
+  #         example: 123
+  #     responses:
+  #       "200":
+  #         description: successful search
+  #         content:
+  #           application/json:
+  #             schema:
+  #               type: array
+  #               items:
+  #                 $ref: '#/components/schemas/Team'
+  #       "400":
+  #         description: Wrong parameters
 components:
   schemas:
     UserRegister:
