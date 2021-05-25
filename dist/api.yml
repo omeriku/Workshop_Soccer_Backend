@@ -1,22 +1,17 @@
----
 openapi: 3.0.0
 info:
-  title: Simple Inventory API
-  description: This is a simple API
-  contact:
-    email: you@your-company.com
-  license:
-    name: Apache 2.0
-    url: http://www.apache.org/licenses/LICENSE-2.0.html
-  version: 1.0.0
-servers:
-- url: https://virtserver.swaggerhub.com/Soccer3/omer/1.0.0
-  description: SwaggerHub API Auto Mocking
+  title: SportMonks SuperLeague API
+  description: This is a simple API for SportMonks SuperLeague Denmark
+  # contact:
+  #   email: you@your-company.com
 tags:
-- name: admins
-  description: Secured Admin-only calls
-- name: developers
-  description: Operations available to regular developers
+  - User
+  - Team
+  - Player
+  - Coach
+  - League
+  - Add Favorites
+  - Get Favorites
 paths:
   /register:
     post:
@@ -67,10 +62,10 @@ paths:
           description: the user got out of the system Sucs
         "400":
           description: Something went Wrong 
-  /team/{teamId}:
+  /teams/detailsById/{teamId}:
     get:
       tags:
-      - teamId
+      - Team
       parameters:
       - name: teamId
         in: path
@@ -90,10 +85,10 @@ paths:
                 $ref: '#/components/schemas/Team'
         "400":
           description: Wrong parameters
-  /team/{teamName}:
+  /teams/detailsByName/{teamName}:
     get:
       tags:
-      - teamName
+      - Team
       parameters:
       - name: teamName
         in: path
@@ -116,7 +111,7 @@ paths:
   /player/{playerId}:
     get:
       tags:
-      - playerId
+      - Player
       parameters:
       - name: playerId
         in: path
@@ -139,7 +134,7 @@ paths:
   /coach/{coachId}:
     get:
       tags:
-      - coachId
+      - Coach
       parameters:
       - name: coachId
         in: path
@@ -159,20 +154,20 @@ paths:
                 $ref: '#/components/schemas/Coach'
         "400":
           description: Wrong parameters
-  /league/{leagueId}:
+  /league/getDetails:
     get:
       tags:
-      - leagueId
-      parameters:
-      - name: leagueId
-        in: path
-        description: id of league to return
-        required: true
-        style: simple
-        explode: false
-        schema:
-          type: integer
-          example: 123
+      - League
+      # parameters:
+      # - name: leagueId
+      #   in: path
+      #   description: id of league to return
+      #   required: true
+      #   style: simple
+      #   explode: false
+      #   schema:
+      #     type: integer
+      #     example: 123
       responses:
         "200":
           description: successful search
@@ -185,7 +180,7 @@ paths:
   /favorites/game:
     post:
       tags:
-      - addFav
+      - Add Favorites
       summary: adds fav game
       requestBody:
         content:
@@ -201,7 +196,7 @@ paths:
   /favorites/player:
     post:
       tags:
-      - addFav
+      - Add Favorites
       summary: adds fav player
       requestBody:
         content:
@@ -217,7 +212,7 @@ paths:
   /favorites/team:
     post:
       tags:
-      - addFav
+      - Add Favorites
       summary: adds fav team
       requestBody:
         content:
@@ -233,7 +228,7 @@ paths:
   /favorites/game/{userId}:
     get:
       tags:
-      - getFav
+      - Get Favorites
       summary: search fav games of user
       parameters:
       - name: userId
@@ -259,7 +254,7 @@ paths:
   /favorites/player/{userId}:
     get:
       tags:
-      - getFav
+      - Get Favorites
       summary: search fav players of user
       parameters:
       - name: userId
@@ -285,7 +280,7 @@ paths:
   /favorites/team/{userId}:
     get:
       tags:
-      - getFav
+      - Get Favorites
       summary: search fav teams of user
       parameters:
       - name: userId
@@ -339,7 +334,7 @@ components:
           type: string
           format: email
           example: omer@gmail.com
-        image-url:
+        imageUrl:
           type: string
           format: URL
           example: https://facebook.com/profilepic/galzamir
@@ -407,13 +402,18 @@ components:
     League:
       type: object
       properties:
-        id:
-          type: integer
-          example: 567
-        season:
+        league_name:
           type: string
-          example: 2010/2011
-      description: league's base properties
+          description: league name
+          example: Superliga
+        current_season_name:
+          type: string
+          description: current season name
+          example: "2020/2021"
+        current_stage_name:
+          type: string
+          description: current stage name
+          example: Championship Round
 
 
 
