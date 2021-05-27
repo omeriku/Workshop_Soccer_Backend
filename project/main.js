@@ -51,6 +51,7 @@ const auth = require("./routes/auth");
 const users = require("./routes/users");
 const league = require("./routes/league");
 const teams = require("./routes/teams");
+const player = require("./routes/player");
 
 //#endregion
 
@@ -78,6 +79,7 @@ app.get("/alive", (req, res) => res.send("I'm alive"));
 app.use("/users", users);
 app.use("/league", league);
 app.use("/teams", teams);
+app.use("/player",player);
 app.use(auth);
 
 app.use(function (err, req, res, next) {

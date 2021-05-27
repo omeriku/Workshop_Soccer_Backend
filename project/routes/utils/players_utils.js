@@ -1,6 +1,15 @@
 const axios = require("axios");
+const { get } = require("../teams");
 const api_domain = "https://soccer.sportmonks.com/api/v2.0";
 // const TEAM_ID = "85";
+// const SEASON_ID = await axios.get(`${api_domain}/leagues/${LEAGUE_ID}`,
+// {
+//   params: {
+//     include: "season",
+//     api_token: process.env.api_token,
+//   },
+// }
+// );
 
 async function getPlayerIdsByTeam(team_id) {
   let player_ids_list = [];
@@ -15,6 +24,41 @@ async function getPlayerIdsByTeam(team_id) {
   );
   return player_ids_list;
 }
+
+
+async function getOnePlayerInfo(player_id){
+  // name, position, teamName, image
+  let playerDet = [];
+  const detailsOfPlayer = await axios.get(`${api_domain}/players/${player_id}`,{
+    params: {
+      api_token: process.env.api_token
+    },
+  })
+
+  playerName = detailsOfPlayer.data.data.fullname;
+  playerPos = detailsOfPlayer.data.data.position_id;
+  playerPic = detailsOfPlayer.data.data.image_path;  
+
+  const teamId = detailsOfPlayer.data.data.team_id;
+  const posId = detailsOfPlayer.data.data.position_id;
+
+  // Get the team name
+  const detTeamName = await axios.get(`${api_domain}/teams/${teamId}`,{
+    params: {
+      api_token: process.env.api_token
+    },
+  })
+  playerTeamName = detTeamName.data.data.name;
+  
+  return {
+    id: player_id,
+    name: playerName,
+    team: playerTeamName,
+    imageUrl: playerPic,  
+    position_id: posId    
+  };
+}
+
 
 async function getPlayersInfo(players_ids_list) {
   let promises = [];
@@ -51,5 +95,7 @@ async function getPlayersByTeam(team_id) {
   return players_info;
 }
 
+
 exports.getPlayersByTeam = getPlayersByTeam;
 exports.getPlayersInfo = getPlayersInfo;
+exports.getOnePlayerInfo = getOnePlayerInfo;
