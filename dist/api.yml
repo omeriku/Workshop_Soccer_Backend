@@ -106,7 +106,7 @@ paths:
                 $ref: '#/components/schemas/Team'
         "400":
           description: Wrong parameters
-  /player/{playerId}:
+  /player/partialDetails/{playerId}:
     get:
       tags:
       - Player
@@ -127,6 +127,29 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Player'
+        "400":
+          description: Wrong parameters
+  /player/fullDetails/{playerId}:
+    get:
+      tags:
+      - Player
+      parameters:
+      - name: playerId
+        in: path
+        description: id of player to return
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+          example: 123
+      responses:
+        "200":
+          description: successful search
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PlayerFull'
         "400":
           description: Wrong parameters
   # /coach/{coachId}:
@@ -376,6 +399,17 @@ components:
         name:
           type: string
           example: messi
+        team:
+          type: string
+          example: barca
+        imageUrl:
+          pattern: URL
+          type: string
+          description: URL for the user's image
+          example: https://cloudinary.com/
+        position:
+          type: integer
+          example: 1
       description: Player's base properties
     Coach:
       type: object
@@ -412,6 +446,46 @@ components:
           type: string
           description: current stage name
           example: Championship Round
+    PlayerFull:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 123
+        name:
+          type: string
+          example: messi
+        team:
+          type: string
+          example: barca
+        imageUrl:
+          pattern: URL
+          type: string
+          description: URL for the user's image
+          example: https://cloudinary.com/
+        position:
+          type: integer
+          example: 1
+        common-name:
+          type: string
+          example: messi
+        nationality:
+          type: string
+          example: israel
+        birthDate:
+          type: string
+          example: 12/02/2021
+        birthCountry:
+          type: string
+          example: israel
+        height:
+          type: integer
+          example: 1.65
+        weight:
+          type: integer
+          example: 70
+
+
 
 
 
