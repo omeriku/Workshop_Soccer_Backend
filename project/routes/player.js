@@ -11,7 +11,6 @@ router.get("/partialDetails/:playerId",async (req,res,next) => {
     } catch (error) {
     next(error);
   }
-
 })
 
 router.get("/fullDetails/:playerId",async (req,res,next) => {
