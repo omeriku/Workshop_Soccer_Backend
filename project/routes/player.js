@@ -11,6 +11,17 @@ router.get("/partialDetails/:playerId",async (req,res,next) => {
     } catch (error) {
     next(error);
   }
+})
+
+router.get("/fullDetails/:playerId",async (req,res,next) => {
+    let playerInfo = [];
+    try {
+        const playerInfo = await players_utils.getMoreDataOfPlayer(req.params.playerId)
+        res.send(playerInfo);
+    } catch (error) {
+    next(error);
+  }
+
 
 })
 
