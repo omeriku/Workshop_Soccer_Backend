@@ -154,7 +154,6 @@ async function getDataByName(player_name){
       api_token: process.env.api_token
     }  
   })
-  console.log(teamsIds)
  // Check inside teams
   playersWithTheNameList.data.data.map((player) => {
     
