@@ -106,6 +106,21 @@ paths:
                 $ref: '#/components/schemas/Team'
         "400":
           description: Wrong parameters
+  /teams/allTeams:
+    get:
+      tags:
+      - Team
+      responses:
+        "200":
+          description: All Super League teams sent
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Team'
+        "400":
+          description: Something went Wrong 
   /player/partialDetails/{playerId}:
     get:
       tags:
