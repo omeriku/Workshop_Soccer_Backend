@@ -167,6 +167,29 @@ paths:
                 $ref: '#/components/schemas/PlayerFull'
         "400":
           description: Wrong parameters
+  /player/partialDetailsByName/{playerName}:
+    get:
+      tags:
+      - Player
+      parameters:
+      - name: playerId
+        in: path
+        description: id of player to return
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+          example: 123
+      responses:
+        "200":
+          description: successful search
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Player'
+        "400":
+          description: Wrong parameters
   # /coach/{coachId}:
   #   get:
   #     tags:

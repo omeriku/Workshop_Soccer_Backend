@@ -21,8 +21,16 @@ router.get("/fullDetails/:playerId",async (req,res,next) => {
     } catch (error) {
     next(error);
   }
-
-
 })
 
+router.get("/partialDetailsByName/:playerName",async (req,res,next) => {
+  let playersInfo = [];
+  try {
+      const playersInfo = await players_utils.getDataByName(req.params.playerName)
+      res.send(playersInfo);
+  } catch (error) {
+  next(error);
+}
+})
+ 
 module.exports = router;
