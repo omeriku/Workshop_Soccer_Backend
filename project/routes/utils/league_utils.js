@@ -1,5 +1,6 @@
 const axios = require("axios");
 const LEAGUE_ID = 271;
+const DButils = require("./DButils");
 
 async function getLeagueDetails() {
   const league = await axios.get(
@@ -19,10 +20,14 @@ async function getLeagueDetails() {
       },
     }
   );
+  const next_game = await DButils.execQuery(
+    "SELECT TOP (1) * FROM dbo.games WHERE GETDATE() < date_time ORDER BY date_time"
+  );
   return {
     league_name: league.data.data.name,
     current_season_name: league.data.data.season.data.name,
     current_stage_name: stage.data.data.name,
+    next_match_details: next_game[0]
     // next game details should come from DB
   };
 }
