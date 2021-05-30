@@ -236,7 +236,7 @@ paths:
                 $ref: '#/components/schemas/League'
         "400":
           description: Wrong parameters
-  /favorites/game:
+  /favorites/addGame:
     post:
       tags:
       - Favorites
@@ -245,7 +245,11 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Game'
+             type: object
+             properties:
+              id:
+                type: integer
+                example: 6
         required: true
       responses:
         "201":
@@ -284,7 +288,7 @@ paths:
   #         description: team was added to favs
   #       "400":
   #         description: Wrong parameters
-  /favorites/game/{userId}:
+  /favorites/getGame:
     get:
       tags:
       - Favorites
@@ -462,12 +466,33 @@ components:
     Game:
       type: object
       properties:
-        id:
+        game_id:
           type: integer
-          example: 234
-        hasBeen:
-          type: boolean
-          example: true
+          example: 5
+        home_team_id:
+          type: integer
+          example: 85
+        away_team_id:
+          type: integer
+          example: 2585
+        date_time:
+          type: string
+          example: "2021-05-15 20:30:00"
+        home_goals:
+          type: integer 
+          example: 2
+        away_goals:
+          type: integer 
+          example: 2
+        winner_team_id:
+          type: integer
+          example: 2585
+        stadium:
+          type: string
+          example: Camp Nou
+        referee_id:
+          type: integer
+          example: 2
       description: game's base properties
     League:
       type: object
