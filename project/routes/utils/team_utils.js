@@ -32,6 +32,16 @@ async function getAllTeams() {
   return teams_info;
 }
 
-
+async function getTeamIdFromName(team_name){
+  let teams = await getAllTeams();
+  let teamsIds = teams.map((team) => team.id)
+  let teamDic = {}
+  teams.map((team) =>{teamDic[team.name] = team.id})
+  
+  theTeamId = teamDic[team_name]
+  
+  return theTeamId
+}
 
 exports.getAllTeams = getAllTeams;
+exports.getTeamIdFromName = getTeamIdFromName
