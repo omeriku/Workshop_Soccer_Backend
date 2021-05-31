@@ -172,15 +172,15 @@ paths:
       tags:
       - Player
       parameters:
-      - name: playerId
+      - name: playerName
         in: path
-        description: id of player to return
+        description: write player name
         required: true
         style: simple
         explode: false
         schema:
-          type: integer
-          example: 123
+          type: string
+          example: 'Sten'
       responses:
         "200":
           description: successful search
@@ -269,6 +269,26 @@ paths:
           description: game was added to favs
         "400":
           description: Wrong parameters
+  /favorites/delGame:
+    post:
+      tags:
+      - Favorites
+      summary: remove fav game
+      requestBody:
+        content:
+          application/json:
+            schema:
+             type: object
+             properties:
+              id:
+                type: integer
+                example: 6
+        required: true
+      responses:
+        "201":
+          description: game was removed
+        "409":
+          description: Game not found
   # /favorites/player:
   #   post:
   #     tags:
@@ -454,9 +474,6 @@ components:
         name:
           type: string
           example: messi
-        team:
-          type: string
-          example: barca
         imageUrl:
           pattern: URL
           type: string
@@ -464,7 +481,10 @@ components:
           example: https://cloudinary.com/
         position:
           type: integer
-          example: 1
+          example: 1        
+        team:
+          type: string
+          example: barca
       description: Player's base properties
     Coach:
       type: object

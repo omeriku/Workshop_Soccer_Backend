@@ -30,11 +30,15 @@ async function getPlayerIdsByTeam(team_id) {
 async function getOnePlayerInfo(player_id){
   // name, position, teamName, image
   let playerDet = [];
-  const detailsOfPlayer = await axios.get(`${api_domain}/players/${player_id}`,{
-    params: {
-      api_token: process.env.api_token
-    },
-  })
+  try{
+    const detailsOfPlayer = await axios.get(`${api_domain}/players/${player_id}`,{
+      params: {
+        api_token: process.env.api_token
+      },
+    })
+  } catch(error){
+    throw{status: 404, message: "There is no such player"}
+  }
 
   playerName = detailsOfPlayer.data.data.fullname;
   playerPos = detailsOfPlayer.data.data.position_id;
@@ -99,11 +103,16 @@ async function getPlayersByTeam(team_id) {
 
 // Get Full data of player
 async function getMoreDataOfPlayer(player_id) {
+    
+  try{
   const detailsOfPlayer = await axios.get(`${api_domain}/players/${player_id}`,{
     params: {
       api_token: process.env.api_token
     },
-  })
+  }) 
+  } catch(error){
+    throw{status: 404, message: "There is no such player"} 
+  } 
   
   teamId = detailsOfPlayer.data.data.team_id;
   playerName = detailsOfPlayer.data.data.fullname;
