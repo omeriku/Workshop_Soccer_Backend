@@ -11,4 +11,14 @@ router.get("/getDetails", async (req, res, next) => {
   }
 });
 
+
+router.get("/getCurStage", async (req,res,next) => {
+  try{
+    const stageGames = await league_utils.getCurStage();
+    res.send(stageGames);
+  } catch(error) {
+    next(error);
+  }
+})
+
 module.exports = router;

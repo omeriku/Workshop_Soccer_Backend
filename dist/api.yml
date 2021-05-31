@@ -236,6 +236,19 @@ paths:
                 $ref: '#/components/schemas/League'
         "400":
           description: Wrong parameters
+  /league/getCurStage:
+    get:
+      tags:
+        - League
+      responses:
+        "200":
+          description: successful stage data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Stage'
+
+        
   /favorites/addGame:
     post:
       tags:
@@ -494,6 +507,58 @@ components:
           type: integer
           example: 2
       description: game's base properties
+
+    GamePartialDataForFutureGame:
+      type: object
+      properties:
+        game_id:
+          type: integer
+          example: 15
+        date_time:
+          type: string
+          example: "2021-05-15 20:30:00"        
+        home_team_id:
+          type: integer
+          example: 85
+        away_team_id:
+          type: integer
+          example: 2585        
+        stadium:
+          type: string
+          example: Camp Nou
+
+    GameForPastGame:
+      type: object
+      properties:
+        game_id:
+          type: integer
+          example: 5
+        date_time:
+          type: string
+          example: "2021-05-15 20:30:00"
+        home_team_id:
+          type: integer
+          example: 85
+        away_team_id:
+          type: integer
+          example: 2585
+        stadium:
+          type: string
+          example: Camp Nou
+        home_goals:
+          type: integer 
+          example: 2
+        away_goals:
+          type: integer 
+          example: 2
+        winner_team_id:
+          type: integer
+          example: 2585
+        events:
+          type: array
+          items:
+            $ref: "#/components/schemas/Event" 
+        
     League:
       type: object
       properties:
@@ -547,10 +612,35 @@ components:
         weight:
           type: integer
           example: 70
-
-
-
-
+    
+    Event:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 123
+        date_time:
+          type: string
+          example: "2021-05-15 20:30:00"
+        minute:
+          type: integer
+          example: 32
+        description:
+          type: string
+          example: "yellow card"
+ 
+    
+    Stage:
+      type: object
+      properties:
+        futureGames: 
+          type: array
+          items:
+            $ref: "#/components/schemas/GamePartialDataForFutureGame"
+        pastGames:
+          type: array
+          items:
+            $ref: "#/components/schemas/GameForPastGame"
 
 
 

@@ -7,4 +7,3 @@ CREATE TABLE [dbo].[games](
 	[goals_away_team] [INT](100) NOT NULL,
 	[field] varchar(100) NOT NULL
 );
-
