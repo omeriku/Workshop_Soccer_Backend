@@ -73,7 +73,7 @@ paths:
         explode: false
         schema:
           type: integer
-          example: 123
+          example: 85
       responses:
         "200":
           description: successful search
@@ -96,7 +96,7 @@ paths:
         explode: false
         schema:
           type: string
-          example: fc Barcelona
+          example: København  
       responses:
         "200":
           description: successful search
@@ -117,8 +117,7 @@ paths:
             application/json:
               schema:
                 type: array
-                items:
-                  $ref: '#/components/schemas/Team'
+                $ref: '#/components/schemas/shortTeam'
         "400":
           description: Something went Wrong 
   /player/partialDetails/{playerId}:
@@ -458,13 +457,25 @@ components:
         id:
           type: integer
           example: 123
-        name:
-          type: string
-          example: FC Barcelona
-        season:
-          type: string
-          example: 2010/2011
+        players:
+          type: array
+          items: 
+            $ref: '#/components/schemas/Player'
+        games:
+          type: array
+          items:
+            $ref: '#/components/schemas/Game'
       description: Team's base properties
+
+    shortTeam:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 85
+        name: 
+          type: string
+          example: København
     Player:
       type: object
       properties:
