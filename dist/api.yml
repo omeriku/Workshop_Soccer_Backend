@@ -2,14 +2,14 @@ openapi: 3.0.0
 info:
   title: SportMonks SuperLeague API
   description: This is a simple API for SportMonks SuperLeague Denmark
-  # contact:
-  #   email: you@your-company.com
+  
 tags:
   - User
   - Team
   - Player
   - League
   - Favorites
+  - Manager
 paths:
   /register:
     post:
@@ -60,6 +60,7 @@ paths:
           description: the user got out of the system Sucs
         "400":
           description: Something went Wrong 
+          
   /teams/detailsById/{teamId}:
     get:
       tags:
@@ -120,6 +121,7 @@ paths:
                 $ref: '#/components/schemas/shortTeam'
         "400":
           description: Something went Wrong 
+
   /player/partialDetails/{playerId}:
     get:
       tags:
@@ -189,43 +191,11 @@ paths:
                 $ref: '#/components/schemas/Player'
         "400":
           description: Wrong parameters
-  # /coach/{coachId}:
-  #   get:
-  #     tags:
-  #     - Coach
-  #     parameters:
-  #     - name: coachId
-  #       in: path
-  #       description: id of Coach to return
-  #       required: true
-  #       style: simple
-  #       explode: false
-  #       schema:
-  #         type: integer
-  #         example: 123
-  #     responses:
-  #       "200":
-  #         description: successful search
-  #         content:
-  #           application/json:
-  #             schema:
-  #               $ref: '#/components/schemas/Coach'
-  #       "400":
-  #         description: Wrong parameters
+
   /league/getDetails:
     get:
       tags:
       - League
-      # parameters:
-      # - name: leagueId
-      #   in: path
-      #   description: id of league to return
-      #   required: true
-      #   style: simple
-      #   explode: false
-      #   schema:
-      #     type: integer
-      #     example: 123
       responses:
         "200":
           description: successful search
@@ -246,8 +216,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Stage'
-
-        
+     
   /favorites/addGame:
     post:
       tags:
@@ -288,38 +257,6 @@ paths:
           description: game was removed
         "409":
           description: Game not found
-  # /favorites/player:
-  #   post:
-  #     tags:
-  #     - Add Favorites
-  #     summary: adds fav player
-  #     requestBody:
-  #       content:
-  #         application/json:
-  #           schema:
-  #             $ref: '#/components/schemas/Player'
-  #       required: true
-  #     responses:
-  #       "201":
-  #         description: player was added to favs
-  #       "400":
-  #         description: Wrong parameters
-  # /favorites/team:
-  #   post:
-  #     tags:
-  #     - Add Favorites
-  #     summary: adds fav team
-  #     requestBody:
-  #       content:
-  #         application/json:
-  #           schema:
-  #             $ref: '#/components/schemas/Team'
-  #       required: true
-  #     responses:
-  #       "201":
-  #         description: team was added to favs
-  #       "400":
-  #         description: Wrong parameters
   /favorites/getGame:
     get:
       tags:
@@ -346,58 +283,40 @@ paths:
                   $ref: '#/components/schemas/Game'
         "400":
           description: Wrong parameters
-  # /favorites/player/{userId}:
-  #   get:
-  #     tags:
-  #     - Get Favorites
-  #     summary: search fav players of user
-  #     parameters:
-  #     - name: userId
-  #       in: path
-  #       description: return fav players of user
-  #       required: true
-  #       style: simple
-  #       explode: false
-  #       schema:
-  #         type: integer
-  #         example: 123
-  #     responses:
-  #       "200":
-  #         description: successful search
-  #         content:
-  #           application/json:
-  #             schema:
-  #               type: array
-  #               items:
-  #                 $ref: '#/components/schemas/Player'
-  #       "400":
-  #         description: Wrong parameters
-  # /favorites/team/{userId}:
-  #   get:
-  #     tags:
-  #     - Get Favorites
-  #     summary: search fav teams of user
-  #     parameters:
-  #     - name: userId
-  #       in: path
-  #       description: return fav teams of user
-  #       required: true
-  #       style: simple
-  #       explode: false
-  #       schema:
-  #         type: integer
-  #         example: 123
-  #     responses:
-  #       "200":
-  #         description: successful search
-  #         content:
-  #           application/json:
-  #             schema:
-  #               type: array
-  #               items:
-  #                 $ref: '#/components/schemas/Team'
-  #       "400":
-  #         description: Wrong parameters
+
+  /manage/createGame:
+    post:
+      tags:
+        - Manager
+      summary: add game to system
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateGame'
+        required: true
+      responses:
+        "201":
+          description: the Game Created Successfully
+        "400":
+          description: Wrong parameters
+  /manage/enterScore:
+    post:
+      tags:
+        - Manager
+      summary: add Socre game
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateGame'
+        required: true
+      responses:
+        "201":
+          description: the Game Updated Successfully
+        "400":
+          description: Wrong parameters
+
 components:
   schemas:
     UserRegister:
@@ -434,6 +353,7 @@ components:
           format: URL
           example: https://facebook.com/profilepic/galzamir
       description: containing user info
+
     UserLogin:
       type: object
       properties:
@@ -451,6 +371,7 @@ components:
           format: password
           example: gal@123
       description: let user into the system
+
     Team:
       type: object
       properties:
@@ -476,6 +397,7 @@ components:
         name: 
           type: string
           example: København
+
     Player:
       type: object
       properties:
@@ -497,6 +419,7 @@ components:
           type: string
           example: barca
       description: Player's base properties
+
     Coach:
       type: object
       properties:
@@ -507,6 +430,7 @@ components:
           type: string
           example: messi
       description: Coach's base properties
+
     Game:
       type: object
       properties:
@@ -539,7 +463,7 @@ components:
           example: 2
       description: game's base properties
 
-    GamePartialDataForFutureGame:
+    FutureGame:
       type: object
       properties:
         game_id:
@@ -605,6 +529,7 @@ components:
           type: string
           description: current stage name
           example: Championship Round
+
     PlayerFull:
       type: object
       properties:
@@ -659,7 +584,6 @@ components:
         description:
           type: string
           example: "yellow card"
- 
     
     Stage:
       type: object
@@ -667,18 +591,162 @@ components:
         futureGames: 
           type: array
           items:
-            $ref: "#/components/schemas/GamePartialDataForFutureGame"
+            $ref: "#/components/schemas/FutureGame"
         pastGames:
           type: array
           items:
             $ref: "#/components/schemas/GameForPastGame"
 
+    CreateGame:
+      type: object
+      properties:
+        home_team_id:
+          type: integer
+          example: 85
+        away_team_id:
+          type: integer
+          example: 2585
+        date_time:
+          type: string
+          example: "2021-05-15 20:30:00"
+        stadium:
+          type: string
+          example: Camp Nou
+        referee_id:
+          type: integer
+          example: 2
+      description: game's base properties
+
+    UpdateGame:
+      type: object
+      properties:
+        game_id:
+          type: integer
+          example: 5
+        home_goals:
+          type: integer 
+          example: 2
+        away_goals:
+          type: integer 
+          example: 2
+      description: game's base properties
 
 
 
 
+  # /coach/{coachId}:
+  #   get:
+  #     tags:
+  #     - Coach
+  #     parameters:
+  #     - name: coachId
+  #       in: path
+  #       description: id of Coach to return
+  #       required: true
+  #       style: simple
+  #       explode: false
+  #       schema:
+  #         type: integer
+  #         example: 123
+  #     responses:
+  #       "200":
+  #         description: successful search
+  #         content:
+  #           application/json:
+  #             schema:
+  #               $ref: '#/components/schemas/Coach'
+  #       "400":
+  #         description: Wrong parameters
 
 
+
+  # /favorites/player:
+  #   post:
+  #     tags:
+  #     - Add Favorites
+  #     summary: adds fav player
+  #     requestBody:
+  #       content:
+  #         application/json:
+  #           schema:
+  #             $ref: '#/components/schemas/Player'
+  #       required: true
+  #     responses:
+  #       "201":
+  #         description: player was added to favs
+  #       "400":
+  #         description: Wrong parameters
+  # /favorites/team:
+  #   post:
+  #     tags:
+  #     - Add Favorites
+  #     summary: adds fav team
+  #     requestBody:
+  #       content:
+  #         application/json:
+  #           schema:
+  #             $ref: '#/components/schemas/Team'
+  #       required: true
+  #     responses:
+  #       "201":
+  #         description: team was added to favs
+  #       "400":
+  #         description: Wrong parameters
+
+
+
+  # /favorites/player/{userId}:
+  #   get:
+  #     tags:
+  #     - Get Favorites
+  #     summary: search fav players of user
+  #     parameters:
+  #     - name: userId
+  #       in: path
+  #       description: return fav players of user
+  #       required: true
+  #       style: simple
+  #       explode: false
+  #       schema:
+  #         type: integer
+  #         example: 123
+  #     responses:
+  #       "200":
+  #         description: successful search
+  #         content:
+  #           application/json:
+  #             schema:
+  #               type: array
+  #               items:
+  #                 $ref: '#/components/schemas/Player'
+  #       "400":
+  #         description: Wrong parameters
+  # /favorites/team/{userId}:
+  #   get:
+  #     tags:
+  #     - Get Favorites
+  #     summary: search fav teams of user
+  #     parameters:
+  #     - name: userId
+  #       in: path
+  #       description: return fav teams of user
+  #       required: true
+  #       style: simple
+  #       explode: false
+  #       schema:
+  #         type: integer
+  #         example: 123
+  #     responses:
+  #       "200":
+  #         description: successful search
+  #         content:
+  #           application/json:
+  #             schema:
+  #               type: array
+  #               items:
+  #                 $ref: '#/components/schemas/Team'
+  #       "400":
+  #         description: Wrong parameters
 
 
 # openapi: 3.0.0
