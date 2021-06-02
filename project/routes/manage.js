@@ -29,7 +29,7 @@ router.post("/createGame", async (req, res, next) => {
     try {
 
       await DButils.execQuery(
-        `INSERT INTO dbo.games (home_team_id, away_team_id, date_time, stadium, referee_id) VALUES ('${req.body.home_team_id}', '${away_team_id}', '${req.body.date_time}', '${req.body.stadium}', '${req.body.referee_id}')`
+        `INSERT INTO dbo.games (home_team_id, away_team_id, date_time, stadium, referee_id) VALUES ('${req.body.home_team_id}', '${req.body.away_team_id}', '${req.body.date_time}', '${req.body.stadium}', '${req.body.referee_id}')`
       );
       res.status(201).send("Game created");
     } catch (error) {
@@ -64,5 +64,23 @@ try {
     res.sendStatus(400);
 }
 });
+
+router.post("/createEvent", async (req, res, next) => {
+    try {
+        const game = (
+        await DButils.execQuery(
+            `SELECT * FROM dbo.games WHERE game_id = '${req.body.game_id}'`
+        )
+        )[0];
+
+      await DButils.execQuery(
+        `INSERT INTO dbo.events (game_id, date_time, minute, description) VALUES ('${req.body.game_id}', '${game.date_time}', '${req.body.minute}', '${req.body.description}')`
+      );
+      res.status(201).send("Event created");
+    } catch (error) {
+      console.log(error)
+      res.sendStatus(400);
+    }
+  });
 
 module.exports = router;

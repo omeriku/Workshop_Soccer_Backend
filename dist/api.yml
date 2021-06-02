@@ -11,6 +11,7 @@ tags:
   - Favorites
   - Manager
 paths:
+
   /register:
     post:
       tags:
@@ -60,7 +61,7 @@ paths:
           description: the user got out of the system Sucs
         "400":
           description: Something went Wrong 
-          
+
   /teams/detailsById/{teamId}:
     get:
       tags:
@@ -304,7 +305,7 @@ paths:
     post:
       tags:
         - Manager
-      summary: add Socre game
+      summary: add Socre to game
       requestBody:
         content:
           application/json:
@@ -314,6 +315,22 @@ paths:
       responses:
         "201":
           description: the Game Updated Successfully
+        "400":
+          description: Wrong parameters
+  /manage/createEvent:
+    post:
+      tags:
+        - Manager
+      summary: add Event to game
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateEvent'
+        required: true
+      responses:
+        "201":
+          description: the Event Created Successfully
         "400":
           description: Wrong parameters
 
@@ -482,7 +499,7 @@ components:
           type: string
           example: Camp Nou
 
-    GameForPastGame:
+    PastGame:
       type: object
       properties:
         game_id:
@@ -584,6 +601,19 @@ components:
         description:
           type: string
           example: "yellow card"
+      
+    CreateEvent:
+      type: object
+      properties:
+        game_id:
+          type: integer
+          example: 8
+        minute:
+          type: integer
+          example: 32
+        description:
+          type: string
+          example: "yellow card"
     
     Stage:
       type: object
@@ -595,7 +625,7 @@ components:
         pastGames:
           type: array
           items:
-            $ref: "#/components/schemas/GameForPastGame"
+            $ref: "#/components/schemas/PastGame"
 
     CreateGame:
       type: object
