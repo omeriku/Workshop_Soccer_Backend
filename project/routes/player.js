@@ -10,8 +10,9 @@ router.get("/partialDetails/:playerId",async (req,res,next) => {
              
         res.send(playerInfo);
     } catch (error) {
-    next(error);
-  }
+      res.status(404).send("No such player id")
+    // next(error);  
+    }      
 })
 
 router.get("/fullDetails/:playerId",async (req,res,next) => {
@@ -21,7 +22,8 @@ router.get("/fullDetails/:playerId",async (req,res,next) => {
      
       res.send(playerInfo);
     } catch (error) {
-    next(error);
+      res.status(404).send("No such player id")
+    // next(error);
   }
   //172104
 })
@@ -39,7 +41,7 @@ router.get("/partialDetailsByName/:playerName",async (req,res,next) => {
       //   // throw { status: 404, message: "There is no such player" };
       // }
       res.send(playersInfo);
-  } catch (error) {
+  } catch (error){
   next(error);
 }
 })
