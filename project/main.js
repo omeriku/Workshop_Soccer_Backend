@@ -53,6 +53,7 @@ const league = require("./routes/league");
 const teams = require("./routes/teams");
 const player = require("./routes/player");
 const favorites = require("./routes/favorites");
+const manage = require("./routes/manage");
 
 //#endregion
 
@@ -82,6 +83,8 @@ app.use("/league", league);
 app.use("/teams", teams);
 app.use("/player",player);
 app.use("/favorites",favorites);
+app.use("/manage",manage);
+
 app.use(auth);
 
 app.use(function (err, req, res, next) {
