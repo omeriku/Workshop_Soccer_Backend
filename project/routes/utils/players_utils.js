@@ -1,4 +1,6 @@
 const axios = require("axios");
+const { stat } = require("fs");
+const { nextTick } = require("process");
 const { get } = require("../teams");
 const { getAllTeams } = require("./team_utils");
 const api_domain = "https://soccer.sportmonks.com/api/v2.0";
@@ -30,16 +32,13 @@ async function getPlayerIdsByTeam(team_id) {
 async function getOnePlayerInfo(player_id){
   // name, position, teamName, image
   let playerDet = [];
-  try{
-    const detailsOfPlayer = await axios.get(`${api_domain}/players/${player_id}`,{
-      params: {
-        api_token: process.env.api_token
-      },
-    })
-  } catch(error){
-    throw{status: 404, message: "There is no such player"}
-  }
-
+  
+    let detailsOfPlayer = await axios.get(`${api_domain}/players/${player_id}`,{
+    params: {
+      api_token: process.env.api_token
+    },    
+  })   
+  
   playerName = detailsOfPlayer.data.data.fullname;
   playerPos = detailsOfPlayer.data.data.position_id;
   playerPic = detailsOfPlayer.data.data.image_path;  
@@ -63,7 +62,6 @@ async function getOnePlayerInfo(player_id){
     position_id: posId    
   };
 }
-
 
 async function getPlayersInfo(players_ids_list) {
   let promises = [];
@@ -103,17 +101,13 @@ async function getPlayersByTeam(team_id) {
 
 // Get Full data of player
 async function getMoreDataOfPlayer(player_id) {
-    
-  try{
+      
   const detailsOfPlayer = await axios.get(`${api_domain}/players/${player_id}`,{
     params: {
       api_token: process.env.api_token
     },
   }) 
-  } catch(error){
-    throw{status: 404, message: "There is no such player"} 
-  } 
-  
+    
   teamId = detailsOfPlayer.data.data.team_id;
   playerName = detailsOfPlayer.data.data.fullname;
   playerPos = detailsOfPlayer.data.data.position_id;
