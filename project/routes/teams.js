@@ -20,6 +20,7 @@ router.get("/detailsById/:teamId", async (req, res, next) => {
     
     // Arrange the data
     let finalToSend = {}
+    finalToSend["id"] = req.params.teamId
     finalToSend["players"] = team_details
     finalToSend["games"] = games   
     // finalToSend.push(team_details)
@@ -47,6 +48,7 @@ router.get("/detailsByName/:teamName", async(req,res,next)=> {
         
     // Arrange the data
     let finalToSend = {}
+    finalToSend["id"] = team_id
     finalToSend["players"] = team_details
     finalToSend["games"] = games
     
