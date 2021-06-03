@@ -7,6 +7,9 @@ const team_utils = require("./utils/team_utils");
 router.get("/detailsById/:teamId", async (req, res, next) => {  
   let team_details = [];
   try {
+
+    let team_id = parseInt(req.params.teamId)
+
     // Get Data of the players
     team_details = await players_utils.getPlayersByTeam(
       req.params.teamId
@@ -21,15 +24,15 @@ router.get("/detailsById/:teamId", async (req, res, next) => {
     
     // Arrange the data
     let finalToSend = {}
-    finalToSend["id"] = req.params.teamId
+    finalToSend["id"] = team_id
     finalToSend["players"] = team_details
     finalToSend["games"] = games   
     // finalToSend.push(team_details)
     // finalToSend.push(games)   
 
     res.send(finalToSend);
-  } catch (error) {
-    res.status(404).send("No such team id")
+  } catch (error) {    
+    res.status(404).send("No such team in the league")
     // next(error);
   }
 });
@@ -63,7 +66,7 @@ router.get("/detailsByName/:teamName", async(req,res,next)=> {
 
   res.send(team_id)
   } catch (error) {
-    res.status(404).send("No such team id")
+    res.status(404).send("No such team in the league")
     // next(error)
   }
 

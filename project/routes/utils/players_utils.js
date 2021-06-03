@@ -4,6 +4,7 @@ const { nextTick } = require("process");
 const { get } = require("../teams");
 const { getAllTeams } = require("./team_utils");
 const api_domain = "https://soccer.sportmonks.com/api/v2.0";
+const LEAGUE_ID = 271;
 // const TEAM_ID = "85";
 // const SEASON_ID = await axios.get(`${api_domain}/leagues/${LEAGUE_ID}`,
 // {
@@ -22,6 +23,25 @@ async function getPlayerIdsByTeam(team_id) {
       api_token: process.env.api_token,
     },
   });
+
+
+  // Check if in the current season
+  const league = await axios.get(
+    `${api_domain}/leagues/${LEAGUE_ID}`,
+    {
+        params: {
+        api_token: process.env.api_token,
+        },
+    }
+    );
+  let seasonID = league.data.data.current_season_id
+
+  if( team.data.data.current_season_id !== seasonID){
+    throw { status: 404, message: "There is no such team in the league" };
+  }
+
+
+
   team.data.data.squad.data.map((player) =>
     player_ids_list.push(player.player_id)
   );
