@@ -72,9 +72,13 @@ router.post("/createEvent", async (req, res, next) => {
             `SELECT * FROM dbo.games WHERE game_id = '${req.body.game_id}'`
         )
         )[0];
-
+          console.log("DATE IS : ------ ",game.date_time)
+        let date = new Date(game.date_time)
+        date.setMinutes( date.getMinutes() + req.body.minute );
+        date = date.toISOString()
+        console.log("AFTER : ---------- ", date)
       await DButils.execQuery(
-        `INSERT INTO dbo.events (game_id, date_time, minute, description) VALUES ('${req.body.game_id}', '${game.date_time}', '${req.body.minute}', '${req.body.description}')`
+        `INSERT INTO dbo.events (game_id, date_time, minute, description) VALUES ('${req.body.game_id}', '${date}', '${req.body.minute}', '${req.body.description}')`
       );
       res.status(201).send("Event created");
     } catch (error) {
