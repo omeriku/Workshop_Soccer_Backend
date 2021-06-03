@@ -1,8 +1,11 @@
 var express = require("express");
+const axios = require("axios");
 var router = express.Router();
 const DButils = require("./utils/DButils");
 const players_utils = require("./utils/players_utils");
 const team_utils = require("./utils/team_utils");
+const api_domain = "https://soccer.sportmonks.com/api/v2.0";
+const LEAGUE_ID = 271;
 
 router.get("/detailsById/:teamId", async (req, res, next) => {  
   let team_details = [];
@@ -41,7 +44,33 @@ router.get("/detailsByName/:teamName", async(req,res,next)=> {
   let team_details = []
   try {
     // Get the team id from name
-    const team_id = await team_utils.getTeamIdFromName(req.params.teamName);
+    // const team_id = await team_utils.getTeamIdFromName(req.params.teamName);
+
+    const teams = await axios.get(
+      `${api_domain}/teams/search/${req.params.teamName}`,
+      {
+          params: {
+          api_token: process.env.api_token,
+          },
+      }
+      );
+    
+      const league = await axios.get(
+        `${api_domain}/leagues/${LEAGUE_ID}`,
+        {
+            params: {
+            api_token: process.env.api_token,
+            },
+        }
+        );
+      let seasonID = league.data.data.current_season_id
+
+
+        // teams is a LIST !!
+
+
+
+    // const team_id = team.data.data.id
 
     // Get Data of the players
     team_details = await players_utils.getPlayersByTeam(team_id)
@@ -66,8 +95,8 @@ router.get("/detailsByName/:teamName", async(req,res,next)=> {
 
   res.send(team_id)
   } catch (error) {
-    res.status(404).send("No such team in the league")
-    // next(error)
+    // res.status(404).send("No such team in the league")
+    next(error)
   }
 
 })
