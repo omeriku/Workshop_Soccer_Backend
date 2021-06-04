@@ -63,37 +63,38 @@ router.get("/detailsByName/:teamName", async(req,res,next)=> {
             },
         }
         );
-      let seasonID = league.data.data.current_season_id
+      const seasonID = league.data.data.current_season_id
 
 
         // teams is a LIST !!
-
+      console.log(teams.data.data)
+      console.log(seasonID)
 
 
     // const team_id = team.data.data.id
 
     // Get Data of the players
-    team_details = await players_utils.getPlayersByTeam(team_id)
+    // team_details = await players_utils.getPlayersByTeam(team_id)
    
-    // Get the games data
-    let games = await DButils.execQuery(
-      `SELECT dbo.games.game_id, home_team_id, away_team_id, date_time, home_goals, away_goals, winner_team_id, stadium,  referee_id 
-      FROM dbo.games WHERE home_team_id = '${team_id}' OR away_team_id = '${team_id}'`
-    )
+    // // Get the games data
+    // let games = await DButils.execQuery(
+    //   `SELECT dbo.games.game_id, home_team_id, away_team_id, date_time, home_goals, away_goals, winner_team_id, stadium,  referee_id 
+    //   FROM dbo.games WHERE home_team_id = '${team_id}' OR away_team_id = '${team_id}'`
+    // )
         
-    // Arrange the data
-    let finalToSend = {}
-    finalToSend["id"] = team_id
-    finalToSend["players"] = team_details
-    finalToSend["games"] = games
+    // // Arrange the data
+    // let finalToSend = {}
+    // finalToSend["id"] = team_id
+    // finalToSend["players"] = team_details
+    // finalToSend["games"] = games
     
     // finalToSend.push(team_details)
     // finalToSend.push(games)   
 
-    res.send(finalToSend);
+    // res.send(finalToSend);
+      res.send(teams.data.data)
 
-
-  res.send(team_id)
+  // res.send(team_id)
   } catch (error) {
     // res.status(404).send("No such team in the league")
     next(error)
