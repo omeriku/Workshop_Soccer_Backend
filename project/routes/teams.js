@@ -55,18 +55,18 @@ router.get("/detailsByName/:teamName", async(req,res,next)=> {
       }
       );
     
-      const league = await axios.get(
-        `${api_domain}/leagues/${LEAGUE_ID}`,
-        {
-            params: {
-            api_token: process.env.api_token,
-            },
-        }
-        );
+    const league = await axios.get(
+      `${api_domain}/leagues/${LEAGUE_ID}`,
+      {
+          params: {
+          api_token: process.env.api_token,
+          },
+      }
+      );
       const seasonID = league.data.data.current_season_id
 
-
-        // teams is a LIST !!
+      let teamsData = getDataOfTeams(seasonID, teams.data.data)
+      
       console.log(teams.data.data)
       console.log(seasonID)
 
