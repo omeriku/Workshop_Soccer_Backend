@@ -55,31 +55,34 @@ async function getOnePlayerInfo(player_id){
   
     let detailsOfPlayer = await axios.get(`${api_domain}/players/${player_id}`,{
     params: {
+      include: "team",
       api_token: process.env.api_token
     },    
   })   
-  
+  // console.log(detailsOfPlayer.data.data)
   playerName = detailsOfPlayer.data.data.fullname;
   playerPos = detailsOfPlayer.data.data.position_id;
   playerPic = detailsOfPlayer.data.data.image_path;  
 
-  const teamId = detailsOfPlayer.data.data.team_id;
+  // const teamId = detailsOfPlayer.data.data.team_id;
   const posId = detailsOfPlayer.data.data.position_id;
 
   // Get the team name
-  const detTeamName = await axios.get(`${api_domain}/teams/${teamId}`,{
-    params: {
-      api_token: process.env.api_token
-    },
-  })
-  playerTeamName = detTeamName.data.data.name;
-  
+  // const detTeamName = await axios.get(`${api_domain}/teams/${teamId}`,{
+  //   params: {
+  //     api_token: process.env.api_token
+  //   },
+  // })
+  // playerTeamName = detTeamName.data.data.name;
+  const playerTeamName = detailsOfPlayer.data.data.team.data.name
+  // console.log(playerTeamName)
   return {
     id: player_id,
     name: playerName,
-    team: playerTeamName,
     imageUrl: playerPic,  
-    position_id: posId    
+    position_id: posId,
+    team: playerTeamName,
+    
   };
 }
 
@@ -125,7 +128,8 @@ async function getMoreDataOfPlayer(player_id) {
       
   const detailsOfPlayer = await axios.get(`${api_domain}/players/${player_id}`,{
     params: {
-      api_token: process.env.api_token
+      api_token: process.env.api_token,
+      include: "team",
     },
   }) 
     
@@ -141,13 +145,13 @@ async function getMoreDataOfPlayer(player_id) {
   weight = detailsOfPlayer.data.data.weight;
 
   // Get the team name
-  const detTeamName = await axios.get(`${api_domain}/teams/${teamId}`,{
-    params: {
-      api_token: process.env.api_token
-    },
-  })
-  playerTeamName = detTeamName.data.data.name;
-
+  // const detTeamName = await axios.get(`${api_domain}/teams/${teamId}`,{
+  //   params: {
+  //     api_token: process.env.api_token
+  //   },
+  // })
+  // playerTeamName = detTeamName.data.data.name;
+  playerTeamName = detailsOfPlayer.data.data.team.data.name
   return {
     id: player_id,
     name: playerName,

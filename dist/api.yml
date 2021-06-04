@@ -83,8 +83,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Team'
-        "400":
-          description: Wrong parameters
+        "404":
+          description: Team not Found
   /teams/detailsByName/{teamName}:
     get:
       tags:
@@ -105,9 +105,11 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Team'
-        "400":
-          description: Wrong parameters
+                type: array
+                items:
+                  $ref: '#/components/schemas/Team'
+        "404":
+          description: Team Not Found
   /teams/allTeams:
     get:
       tags:
@@ -145,8 +147,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Player'
-        "400":
-          description: Wrong parameters
+        "404":
+          description: Player Not Found
   /player/fullDetails/{playerId}:
     get:
       tags:
@@ -168,8 +170,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/PlayerFull'
-        "400":
-          description: Wrong parameters
+        "404":
+          description: Player Not Found
   /player/partialDetailsByName/{playerName}:
     get:
       tags:
@@ -191,8 +193,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Player'
-        "400":
-          description: Wrong parameters
+        "404":
+          description: Player Not Found
 
   /league/getDetails:
     get:
@@ -206,7 +208,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/League'
         "400":
-          description: Wrong parameters
+          description: Something Went Worng
   /league/getCurStage:
     get:
       tags:
@@ -218,7 +220,9 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Stage'
-     
+        "400":
+          description: Something Went Worng
+
   /favorites/addGame:
     post:
       tags:
@@ -259,7 +263,7 @@ paths:
           description: game was removed
         "409":
           description: Game not found
-  /favorites/getGame:
+  /favorites/getGames:
     get:
       tags:
       - Favorites
@@ -272,7 +276,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Game'
+                  $ref: '#/components/schemas/FutureGame'
         "400":
           description: Wrong parameters
 
@@ -292,22 +296,10 @@ paths:
           description: the Game Created Successfully
         "400":
           description: Wrong parameters
-  /manage/enterScore:
-    post:
-      tags:
-        - Manager
-      summary: add Socre to game
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/UpdateGame'
-        required: true
-      responses:
-        "201":
-          description: the Game Updated Successfully
-        "400":
-          description: Wrong parameters
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
   /manage/createEvent:
     post:
       tags:
@@ -324,9 +316,34 @@ paths:
           description: the Event Created Successfully
         "400":
           description: Wrong parameters
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+  /manage/enterScore:
+    put:
+      tags:
+        - Manager
+      summary: add Socre to game
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateGame'
+        required: true
+      responses:
+        "201":
+          description: the Game Updated Successfully
+        "400":
+          description: Wrong parameters
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
 
 components:
   schemas:
+
     UserRegister:
       type: object
       properties:
