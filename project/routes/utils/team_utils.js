@@ -1,6 +1,7 @@
 const axios = require("axios");
-const { resolve } = require("path/posix");
-const { getPlayersByTeam } = require("./players_utils");
+// const { getPlayersByTeam } = require("./players_utils");
+const players_utils = require("./players_utils");
+const DButils = require("./DButils");
 // const { get } = require("../teams");
 const api_domain = "https://soccer.sportmonks.com/api/v2.0";
 const LEAGUE_ID = 271;
@@ -23,10 +24,22 @@ async function getAllTeams() {
       api_token: process.env.api_token,
     },
   });
-  all_team.data.data.map((my_team) => {
+
+  const allGames = await DButils.execQuery(
+    `SELECT * FROM dbo.games`
+  )
+
+  all_team.data.data.map( (my_team) => {
+    
+    let gamesOfTeam = []
+    allGames.map((game)=> 
+    {if (game.home_team_id === my_team.id || game.away_team_id === my_team.id)
+       {gamesOfTeam.push(game)}})
+
     team_ids_list.push( {
       id: my_team.id,
-      name: my_team.name   
+      name: my_team.name, 
+      games: gamesOfTeam  
     });
   });
   let teams_info = await Promise.all(team_ids_list);
@@ -68,7 +81,7 @@ async function createTeamTemplete(team){
 
   return {
     id: team.id,
-    players: await getPlayersByTeam(team),
+    players: await players_utils.getPlayersByTeam(team),
     games: gamesOfTeam
   }
 

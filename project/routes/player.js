@@ -1,5 +1,6 @@
 var express = require("express");
 var router = express.Router();
+const axios = require("axios");
 const DButils = require("./utils/DButils");
 const players_utils = require("./utils/players_utils");
 const team_utils = require("./utils/team_utils");
@@ -32,7 +33,7 @@ router.get("/fullDetails/:playerId",async (req,res,next) => {
   //172104
 })
 
-router.get("/partialDetailsByName/:playerName",async (req,res,next) => {
+router.get("/detailsByName/:playerName",async (req,res,next) => {
   let playersInfo = [];
   try {
       playersInfo = await players_utils.getDataByName(req.params.playerName)
@@ -52,18 +53,8 @@ router.get("/partialDetailsByName/:playerName",async (req,res,next) => {
 
 router.get("/allPlayers",async (req,res,next) => {
   try {
-    const teams = await team_utils.getAllTeams();
-    const teamsIds = teams.map((team) => team.id)
-    let allPlayers = []
-    // teamsIds.forEach(async function (team) {
-    //   console.log(team)
-    //   let players = await players_utils.getPlayersByTeam(team)
-    //   console.log(players)
-    //   allPlayers.push (players)
-    // })
-    console.log(allPlayers)
-
-    res.send(allPlayers)
+      const allPlayers = await players_utils.getAllPlayers()
+      res.status(200).send(allPlayers);
   } catch (error) {
     console.log(error)
     res.status(400).send("Something Went Wrong")

@@ -10,6 +10,7 @@ tags:
   - League
   - Favorites
   - Manager
+  
 paths:
 
   /register:
@@ -126,29 +127,7 @@ paths:
         "400":
           description: Something went Wrong 
 
-  /player/partialDetails/{playerId}:
-    get:
-      tags:
-      - Player
-      parameters:
-      - name: playerId
-        in: path
-        description: id of player to return
-        required: true
-        style: simple
-        explode: false
-        schema:
-          type: integer
-          example: 123
-      responses:
-        "200":
-          description: successful search
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Player'
-        "404":
-          description: Player Not Found
+  
   /player/fullDetails/{playerId}:
     get:
       tags:
@@ -172,7 +151,7 @@ paths:
                 $ref: '#/components/schemas/PlayerFull'
         "404":
           description: Player Not Found
-  /player/partialDetailsByName/{playerName}:
+  /player/detailsByName/{playerName}:
     get:
       tags:
       - Player
@@ -192,9 +171,24 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Player'
+                $ref: '#/components/schemas/PlayerFull'
         "404":
           description: Player Not Found
+  /player/allPlayers:
+      get:
+        tags:
+        - Player
+        responses:
+          "200":
+            description: successful search
+            content:
+              application/json:
+                schema:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/PlayerFull'
+          "400":
+            description: Something went Wrong
 
   /league/getDetails:
     get:
@@ -422,6 +416,10 @@ components:
         name: 
           type: string
           example: København
+        games:
+          type: array
+          items:
+            $ref: '#/components/schemas/Game'
 
     Player:
       type: object
@@ -670,6 +668,32 @@ components:
           type: integer 
           example: 2
       description: game's base properties
+
+
+
+# /player/partialDetails/{playerId}:
+  #   get:
+  #     tags:
+  #     - Player
+  #     parameters:
+  #     - name: playerId
+  #       in: path
+  #       description: id of player to return
+  #       required: true
+  #       style: simple
+  #       explode: false
+  #       schema:
+  #         type: integer
+  #         example: 123
+  #     responses:
+  #       "200":
+  #         description: successful search
+  #         content:
+  #           application/json:
+  #             schema:
+  #               $ref: '#/components/schemas/Player'
+  #       "404":
+  #         description: Player Not Found
 
 
 

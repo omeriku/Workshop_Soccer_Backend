@@ -1,7 +1,7 @@
 const axios = require("axios");
 const { stat } = require("fs");
 const { nextTick } = require("process");
-const { get } = require("../teams");
+// const { get } = require("../teams");
 const { getAllTeams } = require("./team_utils");
 const api_domain = "https://soccer.sportmonks.com/api/v2.0";
 const LEAGUE_ID = 271;
@@ -201,6 +201,49 @@ async function getDataByName(player_name){
 
 }
 
+async function getAllPlayers(){
+  const league = await axios.get(
+    `${api_domain}/leagues/${LEAGUE_ID}`,
+    {
+        params: {
+        api_token: process.env.api_token,
+        },
+    }
+    );
+let seasonID = league.data.data.current_season_id
+  const teams = await axios.get(`https://soccer.sportmonks.com/api/v2.0/teams/season/${seasonID}`,{
+       params: {
+       //   include: squad.player,    
+         api_token: process.env.api_token,
+         include: "squad.player",
+       },
+    });     
+  let allPlayers = []
+  teams.data.data.map( (team)=>{
+      // console.log("heloo");
+      const teamName = team.name;
+      const teamId = team.id
+      let one_team = (team.squad.data.map( (one_player)=>{
+      allPlayers.push( {
+          id: one_player.player.data.player_id, 
+          name: one_player.player.data.fullname,
+          team_name: teamName,
+          team_id: teamId,
+          imageUrl: one_player.player.data.image_path,
+          position_id: one_player.player.data.position_id,
+          common_name: one_player.player.data.common_name,
+          nationality: one_player.player.data.nationality,
+          birthdate: one_player.player.data.birthdate,
+          birthcountry: one_player.player.data.birthcountry,
+          height: one_player.player.data.height,
+          weight: one_player.player.data.weight
+        })
+      }))
+    });
+    return allPlayers
+}
+
+exports.getAllPlayers = getAllPlayers
 exports.getPlayersByTeam = getPlayersByTeam;
 exports.getPlayersInfo = getPlayersInfo;
 exports.getOnePlayerInfo = getOnePlayerInfo;
