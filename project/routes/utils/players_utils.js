@@ -1,19 +1,12 @@
 const axios = require("axios");
-const { stat } = require("fs");
-const { nextTick } = require("process");
-// const { get } = require("../teams");
-const { getAllTeams } = require("./team_utils");
 const api_domain = "https://soccer.sportmonks.com/api/v2.0";
 const LEAGUE_ID = 271;
-// const TEAM_ID = "85";
-// const SEASON_ID = await axios.get(`${api_domain}/leagues/${LEAGUE_ID}`,
-// {
-//   params: {
-//     include: "season",
-//     api_token: process.env.api_token,
-//   },
-// }
-// );
+
+// const { stat } = require("fs");
+// const { nextTick } = require("process");
+// const { get } = require("../teams");
+// const { getAllTeams } = require("./team_utils");
+
 
 async function getPlayerIdsByTeam(team_id) {
   let player_ids_list = [];
@@ -125,6 +118,15 @@ async function getPlayersByTeam(team_id) {
 
 // Get Full data of player
 async function getMoreDataOfPlayer(player_id) {
+  const league = await axios.get(
+    `${api_domain}/leagues/${LEAGUE_ID}`,
+    {
+        params: {
+        api_token: process.env.api_token,
+        },
+    }
+    );
+let seasonID = league.data.data.current_season_id
       
   const detailsOfPlayer = await axios.get(`${api_domain}/players/${player_id}`,{
     params: {
@@ -132,6 +134,11 @@ async function getMoreDataOfPlayer(player_id) {
       include: "team",
     },
   }) 
+
+  if (detailsOfPlayer.data.data.team.data.current_season_id != seasonID || !detailsOfPlayer.data.data.team){
+    throw { status: 404, message: { message: "There is no such player in the League" }};
+
+  }
     
   teamId = detailsOfPlayer.data.data.team_id;
   playerName = detailsOfPlayer.data.data.fullname;
@@ -155,7 +162,8 @@ async function getMoreDataOfPlayer(player_id) {
   return {
     id: player_id,
     name: playerName,
-    team: playerTeamName,
+    team_name: playerTeamName,
+    team_id: detailsOfPlayer.data.data.team.data.id,
     imageUrl: playerPic,
     position: playerPos,
     common_name: commonName,
@@ -171,30 +179,49 @@ async function getMoreDataOfPlayer(player_id) {
 // Get names of players 
 async function getDataByName(player_name){
   
-  let teams = await getAllTeams();
-  let teamsIds = teams.map((team) => team.id)
-  let teamDic = {}
-  teams.map((team) =>{teamDic[team.id] = team.name})
-  // let teamsIds = Object.keys(teamDic)
+
+  const league = await axios.get(
+    `${api_domain}/leagues/${LEAGUE_ID}`,
+    {
+        params: {
+        api_token: process.env.api_token,
+        },
+    }
+    );
+  let seasonID = league.data.data.current_season_id
+
+ 
   let playersToReturn = []  
   const playersWithTheNameList = await axios.get(`${api_domain}/players/search/${player_name}`,{
     params: {
-      api_token: process.env.api_token
+      api_token: process.env.api_token,
+      include: "team",
     }  
   })
  // Check inside teams
+//  console.log(playersWithTheNameList.data.data)
   playersWithTheNameList.data.data.map((player) => {
-    
-    if (teamsIds.includes(player.team_id)) {
+    // console.log(player)
+    if (player.team){
+    if (player.team.data.current_season_id === seasonID ) {
 
       playersToReturn.push({        
         id: player.player_id,
         name: player.display_name,
+        team_name: player.team.data.name,
+        team_id: player.team.data.id,
         imageUrl: player.image_path,
         position: player.position_id,
-        team_name: teamDic[player.team_id]
+        common_name: player.common_name,
+        nationality: player.nationality,
+        birthdate: player.birthdate,
+        birthcountry: player.birthcountry,
+        height: player.height,
+        weight: player.weight
+
       })
     }
+  }
 
   })
   return playersToReturn;

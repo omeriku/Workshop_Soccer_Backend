@@ -10,7 +10,7 @@ tags:
   - League
   - Favorites
   - Manager
-  
+
 paths:
 
   /register:
@@ -141,7 +141,7 @@ paths:
         explode: false
         schema:
           type: integer
-          example: 123
+          example: 25057
       responses:
         "200":
           description: successful search
@@ -164,14 +164,16 @@ paths:
         explode: false
         schema:
           type: string
-          example: 'Sten'
+          example: Peter
       responses:
         "200":
           description: successful search
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/PlayerFull'
+                type: array
+                items:
+                  $ref: '#/components/schemas/PlayerFull'
         "404":
           description: Player Not Found
   /player/allPlayers:
@@ -564,9 +566,12 @@ components:
         name:
           type: string
           example: messi
-        team:
+        team_name:
           type: string
           example: barca
+        team_id:
+          type: integer
+          example: 96
         imageUrl:
           pattern: URL
           type: string
