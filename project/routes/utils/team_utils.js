@@ -109,7 +109,8 @@ async function createTeamTemplete(team){
       // console.log(playerMinData.player.data)
   })
   return {
-    id: team.id,    
+    id: team.id,
+    name: team.name,    
     players: teamPlayers,
     games: gamesOfTeam    
   }

@@ -405,7 +405,7 @@ components:
         players:
           type: array
           items: 
-            $ref: '#/components/schemas/Player'
+            $ref: '#/components/schemas/PlayerFull'
         games:
           type: array
           items:
