@@ -106,7 +106,7 @@ async function createTeamTemplete(team){
 
         }
       )
-      console.log(playerMinData.player.data)
+      // console.log(playerMinData.player.data)
   })
   return {
     id: team.id,    
@@ -116,6 +116,69 @@ async function createTeamTemplete(team){
 
 }
 
+async function getTeamByID(team_id){
+
+  const team = await axios.get(
+    `${api_domain}/teams/${team_id}`,
+    {
+        params: {
+        api_token: process.env.api_token,
+        include: "squad.player"
+        },
+    }
+    );
+  //return teams.data.data
+  const league = await axios.get(
+    `${api_domain}/leagues/${LEAGUE_ID}`,
+    {
+        params: {
+        api_token: process.env.api_token,
+        },
+    }
+    );
+    const seasonID = league.data.data.current_season_id
+     
+    if (team.data.data.current_season_id != seasonID){
+      throw { status: 404, message: { message: "There is no such Team in the League" }};
+    }
+
+    const games = await DButils.execQuery(
+      `SELECT dbo.games.game_id, home_team_id, away_team_id, date_time, home_goals, away_goals, winner_team_id, stadium,  referee_id 
+    FROM dbo.games WHERE home_team_id = '${team_id}' OR away_team_id = '${team_id}'`
+    )
+
+    let allPlayers = []
+
+    team.data.data.squad.data.map((playerMinData) => {
+      allPlayers.push(
+        {
+          player_id: playerMinData.player_id,
+          name: playerMinData.player.data.fullname,
+          team_name: team.data.data.name,
+          team_id: team.data.data.id,
+          imageUrl: playerMinData.player.data.image_path,
+          position_id: playerMinData.player.data.position_id,
+          common_name: playerMinData.player.data.common_name,
+          nationality: playerMinData.player.data.nationality,
+          birthdate: playerMinData.player.data.birthdate,
+          birthcountry: playerMinData.player.data.birthcountry,
+          height: playerMinData.player.data.height,
+          weight: playerMinData.player.data.weight
+
+        }
+      )
+    })
+    return {
+      id:  team.data.data.id,
+      name: team.data.data.name,
+      players: allPlayers,
+      games: games
+    }
+
+}
+
+
 exports.getDataOfTeams = getDataOfTeams;
 exports.getAllTeams = getAllTeams;
 exports.getTeamIdFromName = getTeamIdFromName
+exports.getTeamByID = getTeamByID

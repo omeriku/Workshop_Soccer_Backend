@@ -398,7 +398,10 @@ components:
       properties:
         id:
           type: integer
-          example: 123
+          example: 85
+        name:
+          type: string
+          example: Viborg
         players:
           type: array
           items: 
@@ -593,11 +596,11 @@ components:
           type: string
           example: israel
         height:
-          type: integer
-          example: 1.65
+          type: string
+          example: 165 cm
         weight:
-          type: integer
-          example: 70
+          type: string
+          example: 70 kg
     
     Event:
       type: object

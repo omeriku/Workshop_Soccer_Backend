@@ -13,24 +13,26 @@ router.get("/detailsById/:teamId", async (req, res, next) => {
     let team_id = parseInt(req.params.teamId)
 
     // Get Data of the players
-    team_details = await players_utils.getPlayersByTeam(
-      req.params.teamId
-    );
-    //we should keep implementing team page.....
-    console.log( req.params.teamId)
-    // Get the games data
-    let games = await DButils.execQuery(
-      `SELECT dbo.games.game_id, home_team_id, away_team_id, date_time, home_goals, away_goals, winner_team_id, stadium,  referee_id 
-    FROM dbo.games WHERE home_team_id = '${req.params.teamId}' OR away_team_id = '${req.params.teamId}'`
-    )
+    // team_details = await players_utils.getPlayersByTeam(
+    //   req.params.teamId
+    // );
+    // //we should keep implementing team page.....
+    // console.log( req.params.teamId)
+    // // Get the games data
+    // let games = await DButils.execQuery(
+    //   `SELECT dbo.games.game_id, home_team_id, away_team_id, date_time, home_goals, away_goals, winner_team_id, stadium,  referee_id 
+    // FROM dbo.games WHERE home_team_id = '${req.params.teamId}' OR away_team_id = '${req.params.teamId}'`
+    // )
     
-    // Arrange the data
-    let finalToSend = {}
-    finalToSend["id"] = team_id
-    finalToSend["players"] = team_details
-    finalToSend["games"] = games   
-    // finalToSend.push(team_details)
-    // finalToSend.push(games)   
+    // // Arrange the data
+    // let finalToSend = {}
+    // finalToSend["id"] = team_id
+    // finalToSend["players"] = team_details
+    // finalToSend["games"] = games   
+    // // finalToSend.push(team_details)
+    // // finalToSend.push(games)   
+
+    let finalToSend = await team_utils.getTeamByID(team_id)
 
     res.send(finalToSend);
   } catch (error) { 

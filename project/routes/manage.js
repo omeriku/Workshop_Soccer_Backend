@@ -6,16 +6,17 @@ const DButils = require("./utils/DButils");
 
 router.use(async function (req, res, next) {
   if (req.session && req.session.user_id) {
-    DButils.execQuery("SELECT user_id FROM users")
+    DButils.execQuery("SELECT user_id, hasManagerPermissions FROM users")
       .then((users) => {
-        if (users.find((x) => x.user_id === req.session.user_id)) {
+        // console.log(users)
+
+        if (users.find((x) => x.user_id === req.session.user_id && x.hasManagerPermissions)) {
           req.user_id = req.session.user_id;
-          if (req.user_id === 11 ){
             next()        
           }
-          else{
-            res.sendStatus(403);
-          }
+        else{
+          res.sendStatus(403);
+          
         }
       })
       .catch((err) => next(err));
@@ -72,11 +73,11 @@ router.post("/createEvent", async (req, res, next) => {
             `SELECT * FROM dbo.games WHERE game_id = '${req.body.game_id}'`
         )
         )[0];
-          console.log("DATE IS : ------ ",game.date_time)
+          // console.log("DATE IS : ------ ",game.date_time)
         let date = new Date(game.date_time)
         date.setMinutes( date.getMinutes() + req.body.minute );
         date = date.toISOString()
-        console.log("AFTER : ---------- ", date)
+        // console.log("AFTER : ---------- ", date)
       await DButils.execQuery(
         `INSERT INTO dbo.events (game_id, date_time, minute, description) VALUES ('${req.body.game_id}', '${date}', '${req.body.minute}', '${req.body.description}')`
       );

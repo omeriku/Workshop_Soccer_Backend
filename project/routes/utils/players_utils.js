@@ -161,8 +161,8 @@ let seasonID = league.data.data.current_season_id
   // playerTeamName = detTeamName.data.data.name;
   playerTeamName = detailsOfPlayer.data.data.team.data.name
   let idOfPlayer = parseInt(player_id)
-  let heightParsed = parseInt(height)
-  let weightParsed = parseInt(weight)
+  let heightParsed = height
+  let weightParsed = weight
 
   return {
     id: idOfPlayer,
@@ -223,8 +223,8 @@ async function getDataByName(player_name){
         nationality: player.nationality,
         birthdate: player.birthdate,
         birthcountry: player.birthcountry,
-        height: parseInt(player.height),
-        weight: parseInt(player.weight)
+        height: player.height,
+        weight: player.weight
 
       })
     }
