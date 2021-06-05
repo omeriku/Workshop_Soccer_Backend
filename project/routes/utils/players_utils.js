@@ -68,9 +68,10 @@ async function getOnePlayerInfo(player_id){
   // })
   // playerTeamName = detTeamName.data.data.name;
   const playerTeamName = detailsOfPlayer.data.data.team.data.name
+  const idOfPlayer = parseInt(player_id)
   // console.log(playerTeamName)
   return {
-    id: player_id,
+    id: idOfPlayer,
     name: playerName,
     imageUrl: playerPic,  
     position_id: posId,
@@ -159,8 +160,12 @@ let seasonID = league.data.data.current_season_id
   // })
   // playerTeamName = detTeamName.data.data.name;
   playerTeamName = detailsOfPlayer.data.data.team.data.name
+  let idOfPlayer = parseInt(player_id)
+  let heightParsed = parseInt(height)
+  let weightParsed = parseInt(weight)
+
   return {
-    id: player_id,
+    id: idOfPlayer,
     name: playerName,
     team_name: playerTeamName,
     team_id: detailsOfPlayer.data.data.team.data.id,
@@ -170,8 +175,8 @@ let seasonID = league.data.data.current_season_id
     nationality: nationality,
     birthdate: birthdate,
     birthcountry: birthcountry,
-    height: height,
-    weight: weight
+    height: heightParsed,
+    weight: weightParsed
   };
 
 }
@@ -205,6 +210,8 @@ async function getDataByName(player_name){
     if (player.team){
     if (player.team.data.current_season_id === seasonID ) {
 
+
+
       playersToReturn.push({        
         id: player.player_id,
         name: player.display_name,
@@ -216,8 +223,8 @@ async function getDataByName(player_name){
         nationality: player.nationality,
         birthdate: player.birthdate,
         birthcountry: player.birthcountry,
-        height: player.height,
-        weight: player.weight
+        height: parseInt(player.height),
+        weight: parseInt(player.weight)
 
       })
     }
@@ -251,6 +258,10 @@ let seasonID = league.data.data.current_season_id
       const teamName = team.name;
       const teamId = team.id
       let one_team = (team.squad.data.map( (one_player)=>{
+
+        let heightParsed = parseInt(one_player.player.data.height)
+        let weightParsed = parseInt(one_player.player.data.weight)
+
       allPlayers.push( {
           id: one_player.player.data.player_id, 
           name: one_player.player.data.fullname,
@@ -262,8 +273,8 @@ let seasonID = league.data.data.current_season_id
           nationality: one_player.player.data.nationality,
           birthdate: one_player.player.data.birthdate,
           birthcountry: one_player.player.data.birthcountry,
-          height: one_player.player.data.height,
-          weight: one_player.player.data.weight
+          height: heightParsed,
+          weight: weightParsed
         })
       }))
     });

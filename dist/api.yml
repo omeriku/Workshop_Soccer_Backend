@@ -580,7 +580,7 @@ components:
         position:
           type: integer
           example: 1
-        common-name:
+        common_name:
           type: string
           example: messi
         nationality:
