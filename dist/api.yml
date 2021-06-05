@@ -99,7 +99,7 @@ paths:
         explode: false
         schema:
           type: string
-          example: København  
+          example: Silkeborg  
       responses:
         "200":
           description: successful search
