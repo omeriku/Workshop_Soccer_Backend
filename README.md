@@ -54,7 +54,7 @@ You can find our .env file [here](https://docs.google.com/document/d/1RJ0bNap55g
 To access Manager's Functionalities you will have to be logged in as FIFA Representative
 
 
-```json5
+```yaml
 {
  "username": "fifaRep"
  "password": "fifa123!"
