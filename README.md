@@ -9,7 +9,7 @@ Omer Niv : 315964734
 
 <p align="center">
 <img src="https://user-images.githubusercontent.com/73793617/120917876-417f2380-c6ba-11eb-8597-7b4bc76078ed.png" width="30%">
-</p>
+</p> 
 </br>
 
 This project is a backend server to manage the Danish Soccer Superliga. It uses [Sportmonks API](https://docs.sportmonks.com/football/) to import the real Superliga data to the server. We used [Azure Database](https://portal.azure.com/#home) to create and store our own data - such as Users, Permissions and Soccer Games.
