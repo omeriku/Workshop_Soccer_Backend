@@ -2,6 +2,7 @@ var express = require("express");
 var router = express.Router();
 const DButils = require("../routes/utils/DButils");
 const bcrypt = require("bcryptjs");
+const auth_utils = require("../routes/utils/auth_utils")
 
 router.post("/register", async (req, res, next) => {
   try {
@@ -36,7 +37,8 @@ router.post("/register", async (req, res, next) => {
 
 router.post("/login", async (req, res, next) => {
   try {
-    const user = (
+    auth_utils.loginUser(req.body.username, req.body.password);
+   /* const user = (
       await DButils.execQuery(
         `SELECT * FROM dbo.users WHERE username = '${req.body.username}'`
       )
@@ -46,11 +48,12 @@ router.post("/login", async (req, res, next) => {
 
     // check that username exists & the password is correct
     if (!user || !bcrypt.compareSync(req.body.password, user.password)) {
-      throw { status: 401, message: "Username or Password incorrect" };
+      res.status(401).send("User not Found")
+      // throw { status: 401, message: "Username or Password incorrect" };
     }
 
     // Set cookie
-    req.session.user_id = user.user_id;
+    req.session.user_id = user.user_id;*/
 
     // return cookie
     res.status(200).send("login succeeded");
@@ -60,7 +63,8 @@ router.post("/login", async (req, res, next) => {
 });
 
 router.post("/logout", function (req, res) {
-  req.session.reset(); // reset the session info --> send cookie when  req.session == undefined!!
+  auth_utils.logoutUser(req);
+  // req.session.reset(); // reset the session info --> send cookie when  req.session == undefined!!
   res.send({ success: true, message: "logout succeeded" });
 });
 
