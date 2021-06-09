@@ -37,8 +37,8 @@ router.post("/register", async (req, res, next) => {
 
 router.post("/login", async (req, res, next) => {
   try {
-    auth_utils.loginUser(req.body.username, req.body.password);
-   /* const user = (
+    //auth_utils.loginUser(req.body.username, req.body.password);
+    const user = (
       await DButils.execQuery(
         `SELECT * FROM dbo.users WHERE username = '${req.body.username}'`
       )
@@ -53,7 +53,7 @@ router.post("/login", async (req, res, next) => {
     }
 
     // Set cookie
-    req.session.user_id = user.user_id;*/
+    req.session.user_id = user.user_id;
 
     // return cookie
     res.status(200).send("login succeeded");
