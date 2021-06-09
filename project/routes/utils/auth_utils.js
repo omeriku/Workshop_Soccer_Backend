@@ -53,10 +53,20 @@ async function loginUser(username, pass){
 
 }
 
+async function getUser(username){
+    return (
+        await DButils.execQuery(
+          `SELECT * FROM dbo.users WHERE username = '${username}'`
+        )
+    );    
+}
+
+
 function logoutUser(req){
     req.session.reset();
 }
 
+exports.getUser = getUser;
 exports.registerUser = registerUser;
 exports.loginUser = loginUser;
 exports.logoutUser = logoutUser;

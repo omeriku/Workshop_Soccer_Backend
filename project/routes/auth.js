@@ -38,14 +38,9 @@ router.post("/register", async (req, res, next) => {
 router.post("/login", async (req, res, next) => {
   try {
     //auth_utils.loginUser(req.body.username, req.body.password);
-    const user = (
-      await DButils.execQuery(
-        `SELECT * FROM dbo.users WHERE username = '${req.body.username}'`
-      )
-    )[0];
-    // user = user[0];
-    console.log(user);
-
+    let user = await auth_utils.getUser(req.body.username)
+    user = user[0];
+    
     // check that username exists & the password is correct
     if (!user || !bcrypt.compareSync(req.body.password, user.password)) {
       res.status(401).send("User not Found")
