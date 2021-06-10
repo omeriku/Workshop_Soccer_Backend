@@ -30,7 +30,7 @@ router.post("/createGame", async (req, res, next) => {
     try {
 
       await DButils.execQuery(
-        `INSERT INTO dbo.games (home_team_id, away_team_id, date_time, stadium, referee_id) VALUES ('${req.body.home_team_id}', '${req.body.away_team_id}', '${req.body.date_time}', '${req.body.stadium}', '${req.body.referee_id}')`
+        `INSERT INTO dbo.test_games (home_team_id, away_team_id, date_time, stadium, referee_id) VALUES ('${req.body.home_team_id}', '${req.body.away_team_id}', '${req.body.date_time}', '${req.body.stadium}', '${req.body.referee_id}')`
       );
       res.status(201).send("Game created");
     } catch (error) {

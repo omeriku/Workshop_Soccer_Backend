@@ -6,14 +6,23 @@ const sql = require('mssql')
 var user = request.agent(app)
 require("dotenv").config();
 const axios = require('axios');
-const { compare } = require('bcryptjs');
+const bcryptjs = require('bcryptjs');
 const { response } = require('express');
 const localhost = "http://localhost:3000"
 
 ////////////////// Unit Testing //////////////////
 
 describe("getUser", () =>{
-        
+
+    // beforeAll(async()=>{
+
+    //     let hashedPass = bcryptjs.hashSync('OmerTest1!',parseInt(process.env.bcrypt_saltRounds))
+    
+    //     await DButils.execQuery(
+    //         `INSERT INTO dbo.users (username, password, firstname, lastname, email, country, imageUrl) VALUES ('OmerTest', ${hashedPass} , 'Omer', 'Niv', 'omerniv123@gmail.com', 'Israel', 'www.facebook.com')`
+    //     );
+    // })    
+            
     describe("Returns User", ()=>{
         test("Positive test", async() =>{
             let isPassed = true
@@ -46,78 +55,117 @@ describe("getUser", () =>{
             expect(isPassed).toBe(true)
         })
     })
+
+    // afterAll(async()=>{
+    //     await DButils.execQuery(`DELETE FROM dbo.users WHERE username = 'OmerTest`)
+    // })
+
+
 })
 
 ////////////////// Acceptence tests - Testing Endpoint //////////////////
 describe("Login",()=>{
  
     describe("positive login",()=>{
-        test("positive login", async()=>{
-            let response = await axios.post('http://localhost:3000/login',{
-                "username": 'fifaRep',
-                "password": 'fifa123!'
-            });
-            expect(response.status).toBe(200)
-        },30000)
+
+        it('login successfully', () => {
+            return request(app)
+                .post("/login")
+                .send(
+                    {
+                        username: 'fifaRep',
+                        password: 'fifa123!'
+                    }
+                ).expect(200)
+        });
+
+
+        // test("positive login", async()=>{
+        //     let response = await axios.post('http://localhost:3000/login',{
+        //         "username": 'fifaRep',
+        //         "password": 'fifa123!'
+        //     });
+        //     expect(response.status).toBe(200)        
     })
 
     describe("wrong username login",()=>{
-        test("login wrong username", async()=>{
-            
-            await axios.post('http://localhost:3000/login',{
-              "username": 'Wrong',
-              "password": 'OmerTest1!'
-            })
-            .catch(error => {
-              expect(error.response.status).toBe(401);
-            })
-            // console.log("BEGINNNNNNNN")
-            // let response = await axios.post("http://localhost:3000/login",{
-            //     "username": 'fifaRepppppppppppppp',
-            //     "password": 'fifa123!'
-            // });
-            // console.log("RESSSSS: ", response)
-            // expect(response.status).toBe(401);
-        },30000)
         
-    })
+        it('bad request', () => {
+            return request(app)
+                .post("/login")
+                .send(
+                    {
+                        username: 'Wrong',
+                        password: 'fifa123!'
+                    }
+                ).expect(401)
+        });
+        
+    })   
+        // test("login wrong username", async()=>{
+            
+        //     await axios.post('http://localhost:3000/login',{
+        //       "username": 'Wrong',
+        //       "password": 'OmerTest1!'
+        //     })
+        //     .catch(error => {
+        //       expect(error.response.status).toBe(401);
+        //     })
+            
+        // },30000)
+        
+    
 
     describe("wrong password login",()=>{
-        test("login user", async()=>{
-            await axios.post('http://localhost:3000/login',{
-              "username": 'fifaRep',
-              "password": 'WrongPass1!'
-            })
-            .catch(error => {
-              expect(error.response.status).toBe(401);
-            })
-        },30000)
+
+        it('bad request', () => {
+            return request(app)
+                .post("/login")
+                .send(
+                    {
+                        username: 'fifaRep',
+                        password: 'Wrong!'
+                    }
+                ).expect(401)
+        });
+
+        // test("login user", async()=>{
+        //     await axios.post('http://localhost:3000/login',{
+        //       "username": 'fifaRep',
+        //       "password": 'WrongPass1!'
+        //     })
+        //     .catch(error => {
+        //       expect(error.response.status).toBe(401);
+        //     })
+        // },30000)
     })
 
 
     describe("with no username",()=>{
-        test("login user", async()=>{
-            await axios.post('http://localhost:3000/login',{
-              "username": '',
-              "password": 'fifa123!'
-            })
-            .catch(error => {
-              expect(error.response.status).toBe(401);
-            })
-        },30000)
+        it('bad request', () => {
+            return request(app)
+                .post("/login")
+                .send(
+                    {
+                        username: '',
+                        password: 'fifa123!'
+                    }
+                ).expect(401)
+        });
     })
 
 
     describe("with no password",()=>{
-        test("login user", async()=>{
-            await axios.post('http://localhost:3000/login',{
-              "username": 'fifaRep',
-              "password": ''
-            })
-            .catch(error => {
-              expect(error.response.status).toBe(401);
-            })
-        },30000)
+        it('bad request', () => {
+            return request(app)
+                .post("/login")
+                .send(
+                    {
+                        username: 'fifaRep',
+                        password: 'a'
+                    }
+                ).expect(401)
+        });
     })  
     
 })
