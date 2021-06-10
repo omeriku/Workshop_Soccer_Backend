@@ -1,9 +1,14 @@
 # Assignment 3.2 - Backend
 
+Backend Developers
 
-Omer Tagger : 207904616
+* Omer Tagger
+* Omer Niv
 
-Omer Niv : 315964734
+Jest Test Integrations
+
+* Ronen Aranovich
+* Mor Saranga
 
 ## Danish Superliga Server
 
@@ -45,11 +50,7 @@ https://app.swaggerhub.com/apis-docs/OmerNiv123/sport-monks_super_league_api/2.0
 
 Alternativly, you can access it locally after cloning this repository, install all dependencies and setting up the Server at http://localhost:3000/api
 
-## .evn 
-
-You can find our .env file [here](https://docs.google.com/document/d/1RJ0bNap55gL2a8BELPp7M7AgTLWcI8xjDVzhOjFWtsY/edit?usp=sharing)
-
-* Please note that this file is only visible to <b>BGU Organization Accounts</b>, so be sure to log in first
+## FIFA Representative 
 
 To access Manager's Functionalities you will have to be logged in as FIFA Representative
 
