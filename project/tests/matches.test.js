@@ -38,3 +38,9 @@
 //     const title = await getFirstAlbumTitle();
 //     expect(title).toEqual("My First Album");
 //   });
+
+describe('Sample Test', () => {
+  it('should test that true === true', () => {
+    expect(true).toBe(true)
+  })
+})

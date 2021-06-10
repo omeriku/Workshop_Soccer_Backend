@@ -43,8 +43,8 @@ router.post("/login", async (req, res, next) => {
     
     // check that username exists & the password is correct
     if (!user || !bcrypt.compareSync(req.body.password, user.password)) {
-      res.status(401).send("User not Found")
-      // throw { status: 401, message: "Username or Password incorrect" };
+      // res.status(401).send("User not Found")      
+      throw { status: 401, message: "Username or Password incorrect" };
     }
 
     // Set cookie
