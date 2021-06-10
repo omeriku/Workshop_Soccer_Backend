@@ -5,21 +5,17 @@ const app = require('../main')
 const sql = require('mssql')
 var user = request.agent(app)
 require("dotenv").config();
-//const bcryptjs = require('bcryptjs');
 const { response } = require('express');
+const manage_utils = require('../routes/utils/manage_utils')
+jest.setTimeout(100000);
+var test_session = null;
+
+
+//////////////////Login///////////////////////////
 
 ////////////////// Unit Testing //////////////////
 
 describe("getUser", () =>{
-
-    // beforeAll(async()=>{
-
-    //     let hashedPass = bcryptjs.hashSync('OmerTest1!',parseInt(process.env.bcrypt_saltRounds))
-    
-    //     await DButils.execQuery(
-    //         `INSERT INTO dbo.users (username, password, firstname, lastname, email, country, imageUrl) VALUES ('OmerTest', ${hashedPass} , 'Omer', 'Niv', 'omerniv123@gmail.com', 'Israel', 'www.facebook.com')`
-    //     );
-    // })    
             
     describe("Returns User", ()=>{
         test("Positive test", async() =>{
@@ -53,12 +49,6 @@ describe("getUser", () =>{
             expect(isPassed).toBe(true)
         })
     })
-
-    // afterAll(async()=>{
-    //     await DButils.execQuery(`DELETE FROM dbo.users WHERE username = 'OmerTest`)
-    // })
-
-
 })
 
 ////////////////// Acceptence tests - Testing Endpoint //////////////////
@@ -75,15 +65,7 @@ describe("Login",()=>{
                         password: 'fifa123!'
                     }
                 ).expect(200)
-        });
-
-
-        // test("positive login", async()=>{
-        //     let response = await axios.post('http://localhost:3000/login',{
-        //         "username": 'fifaRep',
-        //         "password": 'fifa123!'
-        //     });
-        //     expect(response.status).toBe(200)        
+        });     
     })
 
     describe("wrong username login",()=>{
@@ -100,17 +82,6 @@ describe("Login",()=>{
         });
         
     })   
-        // test("login wrong username", async()=>{
-            
-        //     await axios.post('http://localhost:3000/login',{
-        //       "username": 'Wrong',
-        //       "password": 'OmerTest1!'
-        //     })
-        //     .catch(error => {
-        //       expect(error.response.status).toBe(401);
-        //     })
-            
-        // },30000)
         
     
 
@@ -126,16 +97,6 @@ describe("Login",()=>{
                     }
                 ).expect(401)
         });
-
-        // test("login user", async()=>{
-        //     await axios.post('http://localhost:3000/login',{
-        //       "username": 'fifaRep',
-        //       "password": 'WrongPass1!'
-        //     })
-        //     .catch(error => {
-        //       expect(error.response.status).toBe(401);
-        //     })
-        // },30000)
     })
 
 
@@ -168,51 +129,81 @@ describe("Login",()=>{
     
 })
 
-afterAll(async ()=>{
-    await app.close();
-});
+//////////////////Matches//////////////////////////
+
+////////////////// UNIT TESTING //////////////////////
+describe('test createGame func', ()=>{
+    
+  it('create games works correctly', async()=>{
+    //let numOfGamesBefore = DButils.execQuery(`SELECT COUNT(*) FROM dbo.test_games`)
+    await manage_utils.createGame(300,301,"2021-05-15 20:30:00","Camp Nou",2)   
+  })
+})
+
+
+////////////////// Integration & Acceptance Testing //////////////////
+
+describe(' test post create game request',()=>{
+
+  it('Game Created After Login',async ()=>{
+    const req = request(app).post("/login").send(
+      {
+        "username": "fifaRep",
+        "password": "fifa123!"
+      })
+    
+    var cookie = (await req).header["set-cookie"][0];
+
+    return request(app)
+    .post("/manage/createGame")
+    .send(        
+        {
+          "home_team_id": 200,
+          "away_team_id": 201,
+          "date_time": "2021-05-15 20:30:00",
+          "stadium": "Camp Nou",
+          "referee_id": 2
+        }        
+    ).set('Cookie', cookie).expect(201)
+  })
 
 
 
+  it('Try to create game with user loggin in with no permissions',async ()=>{
+    const req = request(app).post("/login").send(
+      {
+        "username": "omer123",
+        "password": "gal@123"
+      })
+    
+    var cookie = (await req).header["set-cookie"][0];
+
+    return request(app)
+    .post("/manage/createGame")
+    .send(        
+        {
+          "home_team_id": 200,
+          "away_team_id": 201,
+          "date_time": "2021-05-15 20:30:00",
+          "stadium": "Camp Nou",
+          "referee_id": 2
+        }        
+    ).set('Cookie', cookie).expect(403)
+  })
 
 
+  it('create game without login', async ()=>{    
+    return request(app)
+          .post("/manage/createGame")
+          .send(        
+              {
+                "home_team_id": 200,
+                "away_team_id": 201,
+                "date_time": "2021-05-15 20:30:00",
+                "stadium": "Camp Nou",
+                "referee_id": 2
+              }        
+          ).expect(401)
+      })
 
-
-
-
-
-// const auth = require("../routes/auth");
-//var express = require("express");
-// const { request } = require("express");
-// var router = express.Router();
-//const { request } = require("express");
-// const request = require('supertest');
-// const express = require('express')
-// const app = express
-
-// const axios = require('axios')
-// const localhost = "http://localhost:3000"
-
-// test('test successfull login', async () => {
-//     const res =await axios.post(`${localhost}/login`,{
-//         "username": "fifaRep",
-//         "password": "fifa123!"
-//     });
-//     expect(res.status).toBe(200);
-// });
-
-// test('test unseccessfull login with wrong username', async () => {
-//     let con = 1
-//     try{
-//         res =await axios.post(`${localhost}/login`,{
-//             "username": "fifaRepppppp",
-//             "password": "fifa123!"
-//         });
-//     } catch(error){
-//         con = 2;
-//     }
-//     console.log("TOTOTOTOOOOOOOOOOOOOOOOOOOOOOOOOO")
-//     // console.log(res)
-//     expect(con).toBe(2);
-// });
-
+})

@@ -96,16 +96,11 @@ app.use(function (err, req, res, next) {
 //   res.redirect("/login")
 // })
 
+
 const server = app.listen(port, () => {
   console.log(`Server listen on port ${port}`);
 });
 
 
-
-// process.on("SIGINT", function () {
-//   if (server) {
-//     server.close(() => console.log("server closed"));
-//   }
-// });
 module.exports = server;
 module.exports = app;
