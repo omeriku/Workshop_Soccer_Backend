@@ -1,7 +1,7 @@
 var express = require("express");
 var router = express.Router();
 const DButils = require("./utils/DButils");
-// const manage_utils = require("./utils/manage_utils");
+const manage_utils = require("./utils/manage_utils");
 
 
 router.use(async function (req, res, next) {
@@ -29,9 +29,10 @@ router.use(async function (req, res, next) {
 router.post("/createGame", async (req, res, next) => {
     try {
 
-      await DButils.execQuery(
-        `INSERT INTO dbo.test_games (home_team_id, away_team_id, date_time, stadium, referee_id) VALUES ('${req.body.home_team_id}', '${req.body.away_team_id}', '${req.body.date_time}', '${req.body.stadium}', '${req.body.referee_id}')`
-      );
+      // await DButils.execQuery(
+      //   `INSERT INTO dbo.test_games (home_team_id, away_team_id, date_time, stadium, referee_id) VALUES ('${req.body.home_team_id}', '${req.body.away_team_id}', '${req.body.date_time}', '${req.body.stadium}', '${req.body.referee_id}')`
+      // );
+      await manage_utils.createGame(req.body.home_team_id, req.body.away_team_id, req.body.date_time, req.body.stadium , req.body.referee_id)
       res.status(201).send("Game created");
     } catch (error) {
       console.log(error)

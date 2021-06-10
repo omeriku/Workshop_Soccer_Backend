@@ -5,10 +5,8 @@ const app = require('../main')
 const sql = require('mssql')
 var user = request.agent(app)
 require("dotenv").config();
-const axios = require('axios');
-const bcryptjs = require('bcryptjs');
+//const bcryptjs = require('bcryptjs');
 const { response } = require('express');
-const localhost = "http://localhost:3000"
 
 ////////////////// Unit Testing //////////////////
 
@@ -162,13 +160,17 @@ describe("Login",()=>{
                 .send(
                     {
                         username: 'fifaRep',
-                        password: 'a'
+                        password: ''
                     }
                 ).expect(401)
         });
     })  
     
 })
+
+afterAll(async ()=>{
+    await app.close();
+});
 
 
 
